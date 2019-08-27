@@ -261,7 +261,7 @@ Bajo este enfoque, el monto agregado de siniestro, $S^Y_t$ contempla:
 
 1. El numero de sumandos (frecuencia siniestros), $N_t$, es desconocido/aleatorio,
 
-2. Las severidades individuales tiene un suporte mas cimple, 
+2. Las severidades individuales tiene un suporte mas cumple, 
 $$Y_{tj} \in \mathcal{Y} = (0,\infty),
 $$
 la cual sigue siendo considerada aleatoria/desconocida, **condicional** en 
