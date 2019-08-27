@@ -33,7 +33,6 @@ header-includes:
 \newcommand{\StD}{\operatorname{\text{St}}}
 \newcommand{\NormD}{\operatorname{\text{N}}}
 \newcommand{\GaD}{\operatorname{\text{Ga}}}
-\newcommand{\BeD}{\operatorname{\text{Be}}}
 \newcommand{\UniD}{\operatorname{\text{U}}}
 \newcommand{\DirD}{\operatorname{\text{Dir}}}
 \newcommand{\IG}{\operatorname{\text{InG}}}
@@ -590,8 +589,12 @@ consolidacion.binomialbeta(n0, J, 52.22, 9.52,print=FALSE,summary=TRUE)
 
 1. Seleccionen una submuestra aleatoria del 10\% de los `datos`.
 
-2. Replique los calculos usando los datos de la submuestra aleatoria.
+2. Repliquen los calculos usando los datos de la submuestra aleatoria.
 
 3. Reflexione acerca de los **estimadores puntuales**, el **error epistemico** y relevancia de la **informacion complementaria**.
 
+4. Calculen la distribucion predictiva de incidencia en siniestralidad para $\iota$s.
 
+5. Calculen la distribucion predictiva de **frecuencia de siniestros** para $N$.
+
+Completen estas cinca actividades en un archivo `markdown` distinto.
