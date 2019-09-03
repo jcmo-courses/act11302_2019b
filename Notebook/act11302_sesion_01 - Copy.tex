@@ -1,0 +1,667 @@
+%\documentclass[cjk,slidestop,compress,brown]{beamer}
+\documentclass[cjk,t,compress]{beamer}
+%\documentclass[cjk,slidestop,compress]{beamer}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+
+\mode<presentation>
+{
+%	\usetheme{Hannover}
+%	\usetheme{Goettingen}
+%   \usetheme{Boadilla}
+%	\usetheme{Szeged}
+%	\usetheme{Singapore}
+%	\usetheme{CambridgeUS}
+	\setbeamercovered{dynamic}
+	\usefonttheme[hoptionsi]{serif}
+%  \usecolortheme[green]{structure}
+}
+
+%\usepackage[UTF-8,latin1]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{xcolor}
+%\usepackage[dvips]{color}
+%\usepackage{multicol}
+%\usepackage{subfigure}
+
+\definecolor{MyDarkBlue}{rgb}{0 0.08 0.45}
+\definecolor{MyDarkOrange}{rgb}{1 0.5 0}
+\definecolor{MyDarkGreen}{rgb}{0 0.25 0}
+\definecolor{MyDarkTerracota}{rgb}{0.5 0 0}
+\definecolor{MyDarkGrey}{rgb}{0.25 0.25 0.25}
+
+% ---------------------------------------------
+%				Fields
+% ---------------------------------------------
+\newcommand{\Indicator}{\operatorname{\mathds{1}}}
+\newcommand{\Indic}{\operatorname{\field{I}}}
+\newcommand{\field}[1]{\mathbb{#1}} 
+\newcommand{\C}{\field{C}}
+\newcommand{\E}{\field{E}} 
+\newcommand{\R}{\field{R}}
+\newcommand{\inccoin}{\Delta c}
+\newcommand{\incy}{\Delta y}
+
+% ---------------------------------------------
+%				Observables
+% ---------------------------------------------
+\newcommand{\boldx}{\boldsymbol{x}}
+\newcommand{\boldX}{\boldsymbol{X}}
+\newcommand{\boldy}{\boldsymbol{y}} 
+\newcommand{\boldY}{\boldsymbol{Y}}
+\newcommand{\boldu}{\boldsymbol{u}} 
+\newcommand{\boldU}{\boldsymbol{U}}
+\newcommand{\boldzero}{\boldsymbol{0}} 
+\newcommand{\boldA}{\boldsymbol{A}} 
+\newcommand{\boldW}{\boldsymbol{W}}
+
+% ---------------------------------------------
+%				Parameters
+% ---------------------------------------------
+\newcommand{\piexp}{\pi^{e}} 
+\newcommand{\pidelta}{\delta^{\pi}} 
+
+\newcommand{\rhoexp}{\rho^{e}} 
+\newcommand{\rhodelta}{\delta^{\rho}} 
+
+\newcommand{\tauexp}{\tau^{e}} 
+\newcommand{\taudelta}{\delta^{\tau}} 
+
+\newcommand{\thetaexp}{\theta^{e}} 
+\newcommand{\thetadelta}{\delta^{\theta}} 
+
+\newcommand{\tk}{t:(t+k)} 
+
+\newcommand{\SigmaB}{\boldsymbol{\Sigma}} 
+\newcommand{\sigmaB}{\boldsymbol{\sigma}} 
+\newcommand{\PhiB}{\boldsymbol{\Phi}} 
+\newcommand{\phiB}{\boldsymbol{\phi}} 
+\newcommand{\bB}{\boldsymbol{b}} 
+\newcommand{\boldsigma}{\boldsymbol{\sigma}} 
+\newcommand{\boldSigma}{\boldsymbol{\Sigma}} 
+\newcommand{\boldphi}{\boldsymbol{\phi}} 
+\newcommand{\boldPhi}{\boldsymbol{\Phi}} 
+\newcommand{\boldbeta}{\boldsymbol{\beta}}
+\newcommand{\boldBeta}{\boldsymbol{\Beta}}
+\newcommand{\boldtheta}{\boldsymbol{\theta}}
+\newcommand{\boldTheta}{\boldsymbol{\Theta}}
+
+%   --------------------------------
+%               Notation
+%   --------------------------------
+\newcommand{\Lik}{\mathrm{lik}}
+\newcommand{\diagop}{\text{diag}} 
+\newcommand{\logistic}{\operatorname{\text{logistic}}}
+\newcommand{\logit}{\operatorname{\text{logit}}}
+\newcommand{\dom}{\operatorname{\text{dom}}}
+\newcommand{\ran}{\operatorname{\text{ran}}}
+\renewcommand{\inf}{\operatorname{\text{inf}}}
+\newcommand{\ind}{\operatorname{\text{ind}}}
+\newcommand{\iid}{\operatorname{\text{iid}}}
+\newcommand{\cind}{\operatorname{\text{c.i.}}}
+\newcommand{\wport}{\text{w}}
+
+%\newcommand{\Pr}{\field{P}}
+\newcommand{\dd}{\mathrm{d}}
+\newcommand{\Borel}{\operatorname{\mathscr{B}}}
+\newcommand{\Filtration}{\operatorname{\mathscr{F}}}
+\newcommand{\Expec}{\operatorname{\field{E}}}
+\newcommand{\Var}{\operatorname{\text{Var}}}
+\newcommand{\Prec}{\operatorname{\text{Prec}}}
+\newcommand{\Cov}{\operatorname{\text{Cov}}}
+\newcommand{\Corr}{\operatorname{\text{Corr}}}
+\newcommand{\varmodel}{\operatorname{\text{VAR}}}
+
+\renewcommand{\sin}{\operatorname{\text{sin}}}
+\renewcommand{\cos}{\operatorname{\text{cos}}}
+\renewcommand{\tan}{\operatorname{\text{tan}}}
+\renewcommand{\arctan}{\operatorname{\text{arctan}}}
+\renewcommand{\exp}{\operatorname{\text{exp}}}
+\renewcommand{\log}{\operatorname{\text{log}}}
+\renewcommand{\arg}{\operatorname{\text{arg}}}
+\renewcommand{\min}{\operatorname{\text{min}}}
+\renewcommand{\max}{\operatorname{\text{max}}}
+\renewcommand{\lim}{\operatorname{\text{lim}}}
+\newcommand{\limite}{\operatornamewithlimits{lim}}
+\renewcommand{\det}{\operatorname{\text{det}}}
+\renewcommand{\dim}{\operatorname{\text{dim}}}
+\newcommand{\sign}{\operatorname{\text{sign}}}
+\newcommand{\argmax}{\operatornamewithlimits{arg\,max}}
+\newcommand{\argmin}{\operatornamewithlimits{arg\,min}}
+\newcommand{\diagbloq}{\operatorname{\text{diagbloq}}}
+\newcommand{\rr}{\operatorname{\textsc{R}}}
+
+\newcommand{\ie}{{\it i.e. }} 
+\newcommand{\aka}{{\it a.k.a. }} 
+\newcommand{\eg}{{\it e.g. }} 
+\newcommand{\ala}{{\it \`{a}~la }} 
+\newcommand{\visavis}{{\it vis-\`{a}-vis }}
+
+\newcommand{\inpc}{\text{INPC}}
+\newcommand{\igae}{\text{IGAE}}
+\newcommand{\pib}{\text{PIB}}
+\newcommand{\tiie}{\text{TIIE}}
+\newcommand{\export}{\text{Exportaciones}}
+\newcommand{\import}{\text{Importaciones}}
+\newcommand{\usip}{\text{IP}^{\usa}}
+\newcommand{\remMX}{\text{Rem}^{\usa}}
+\newcommand{\itaen}{\text{ITAE}}
+\newcommand{\itaee}{\text{ITAEE}}
+\newcommand{\usa}{\text{EEUU}}
+\newcommand{\dsge}{\operatornamewithlimits{DSGE}}
+
+% ---------------------------------------------
+%				Distributions
+% ---------------------------------------------
+
+\newcommand{\WiD}{\operatorname{\text{Wi}}}
+\newcommand{\WeD}{\operatorname{\text{We}}}
+\newcommand{\WeNormD}{\operatorname{\text{We-N}}}
+\newcommand{\ExpD}{\operatorname{\text{Exp}}}
+\newcommand{\GeoD}{\operatorname{\text{Geo}}}
+\newcommand{\StD}{\operatorname{\text{St}}}
+\newcommand{\NormD}{\operatorname{\text{N}}}
+\newcommand{\GaD}{\operatorname{\text{Ga}}}
+\newcommand{\BeD}{\operatorname{\text{Be}}}
+\newcommand{\UniD}{\operatorname{\text{U}}}
+\newcommand{\DirD}{\operatorname{\text{Dir}}}
+\newcommand{\IG}{\operatorname{\text{InG}}}
+\newcommand{\IncGa}{\operatorname{\text{IGa}}}
+\newcommand{\IGa}{\operatorname{\text{InGa}}}
+\newcommand{\PoD}{\operatorname{\text{Po}}}
+\newcommand{\BS}{\operatorname{\text{BS}}}
+\newcommand{\DP}{\operatorname{\text{DP}}}
+
+
+%   --------------------------------
+%               Directories
+%   --------------------------------
+\graphicspath{{../figures/}}
+\DeclareGraphicsExtensions{.pdf,.jpeg,.png,.jpg}
+
+\title[C\'alculo Actuarial III]
+{	ACT-11302: C\'alculo Actuarial III\\
+	{\large Sesi\'on 01 - Modelos de Probabilidad}
+}
+
+\author[Mart\'inez-Ovando]{
+{	\footnotesize
+	\textcolor{MyDarkGreen}{Juan~Carlos Mart\'inez-Ovando}}
+}
+
+\institute[ITAM]
+{	\textcolor{MyDarkGrey}{
+	ITAM}
+}
+
+\date[ ] % (optional)
+{	\scriptsize
+	\textcolor{MyDarkGrey}{Oto\~no 2019}
+}
+
+%	--------------------------------------------
+%									Titlepage
+%	--------------------------------------------
+\begin{document}
+\sffamily
+\frame
+	{
+   \frametitle{}
+	\titlepage
+	}
+	
+%	--------------------------------------------
+%									Contents
+%	--------------------------------------------
+\frame{
+	\frametitle{Agenda}
+	\scriptsize
+	\tableofcontents[section]
+	}
+
+
+%	--------------------------------------------
+%	section
+%	--------------------------------------------
+\section{Modelo de probabilidad}
+	%	-------------		FRAME		--------------------
+	\frame
+	{
+   \frametitle{}
+		
+		\vspace{5.5cm}
+		\begin{flushright}
+			\textcolor{MyDarkBlue}{\Large \bf Modelo de probabilidad}
+		\end{flushright}
+	}
+	
+	%	--------------------------------------------
+	%	section
+	%	--------------------------------------------
+	\subsection{Definici\'on}
+	%	-------------		FRAME		--------------------
+	\frame
+	{
+    \frametitle{Definici\'on}
+  		{\scriptsize  	
+		
+		\begin{block}<+->{Notaci\'on}
+	  	{
+	  	\begin{itemize}
+	  		\item $X$ se refiere a una variable aleatoria observable (discreta o continua) 
+	  		\item $x$ se refiere a un valor espec\'ifico de esta variable
+	  	\end{itemize}
+	  	}
+ 		\end{block}  		
+
+	  	\vspace{0.3cm}
+		\begin{block}<+->{Modelo de probabilidad}
+	  	{
+		Sin p\'erdida de generalidad, refir\'amonos a $X$. El modelo de probabilidad se define como la distribuci\'on de probabilidades de $X$ indizada por $\theta$, i.e.
+		\begin{equation}
+			X \sim F(x|\theta).
+		\end{equation}
+	  	\vspace{0.1cm}
+	  	El $soporte$ de $X$, denotado por $\mathcal{X}$, se define como,	  	
+		\begin{equation}
+			\mathcal{X}=\{x:F(x|\theta)>0\},
+		\end{equation}
+		donde $\mathcal{X}$ forma un subconjunto de un espacion Euclidiano de dimensi\'on finita.
+	  	\vspace{0.1cm}
+	  	El par\'ametro $\theta$, toma valores en el espacio parametral $\Theta$ (generalmente de dimensi\'on finita).
+		}
+ 		\end{block}  		
+
+		}
+	}
+
+	%	-------------		FRAME		--------------------
+	\frame
+	{
+    \frametitle{Definici\'on}
+  		{\scriptsize  	
+		
+		\begin{block}<+->{Densidades y masa de probabilidad}
+	  	{
+		\begin{enumerate}
+			\item Cuando $X$ es absolutamente continua, $F(x|\theta)$ admite una densidad, $f(x|\theta)$, tal que 
+			$$
+			F(x|\theta)=\int_{-\infty}^{x}f(s|\theta)ds,
+			$$
+			implicando que el soporte no tenga \'atomos, i.e.
+			$$
+			\Pr(X=x)=0$$
+			para todo $x \in \mathcal{X}$.
+			
+			\item Cuando $X$ es del tipo discreto, el soporte $\mathcal{X}$ est\'a formado solamente por \'atomos, i.e. valores especificos de $X$, digamos $\mathcal{X}=\{x^{*}_1,\ldots,x^{*}_n\}$ tales que 
+			$$
+			\Pr(X=x^{*}_i)=p_i>0,
+			$$
+			para todo $x^{*}_i \in \mathcal{X}$, con
+			$$
+			\sum_{i=1}^{n}p_i=1.
+			$$ 
+		\end{enumerate}
+		}
+ 		\end{block}  		
+
+		}
+	}
+
+
+	%	-------------		FRAME		--------------------
+	\frame
+	{
+    \frametitle{Definici\'on}
+  		{\scriptsize  	
+		
+		\begin{block}<+->{Densidades y masa de probabilidad}
+	  	{
+		\begin{enumerate}
+			\item[3] Cuando $X$ es del tipo mixta, el modelo de probabilidad admite una parte absolutamente continia al mismo tiempo de admitir una parte discreta, i.e.
+			\begin{equation}
+				\Pr(X\leq x)=F(x|\theta) = F_c(x|\theta_c)+ \sum_{x^{*}_k \leq x} p(X=x^{*}_k|\theta_d),
+			\end{equation}
+			donde
+			\begin{itemize}
+				\item $F_c(\cdot)$ es el componente continuo de la distribuci\'on
+				\item $\{x^{*}_k\}_{k\geq 1}$ son los \'atomos de la distribuci\'on
+				\item $\theta_c$ y $\theta_d$ son los par\'ametros asociados con la parte continua y discreta, respectivamente.
+			\end{itemize}
+		\end{enumerate}
+		}
+ 		\end{block}  		
+
+		\begin{block}<+->{Densidades y masa de probabilidad}
+	  	{
+	  	En este tipo de distribuciones, el soporte $\mathcal{X}$ est\'a formado de una parte absolutamente continua (sin \'atomos), $\mathcal{X}_{c}$ , y una parte discreta (formada solo de \'atomos), $\mathcal{X}_{d}$, i.e.
+		$$
+		\mathcal{X}=\mathcal{X}_{c}\cup\mathcal{X}_d.
+	  	$$
+		}
+ 		\end{block}  		
+
+		}
+	}
+
+	%	-------------		FRAME		--------------------
+	\frame
+	{
+    \frametitle{Ejemplo}
+  		{\scriptsize  	
+		
+		\begin{block}<+->{Ejemplo}
+	  	{
+		Pensemos en el modelo de probabilidad con un \'atomo en $\{0\}$ que admite la posibilidad de tomar valores en la recta real positiva, i.e.
+		$$
+		\mathcal{X}=\{0\}\cup(0,\infty).
+		$$
+		}
+ 		\end{block}  		
+
+		\begin{block}<+->{Modelo de probabilidad}
+	  	{
+		El modelo de probabilidad estar\'a definido por una masa de probabilididad en $\{0\}$, i.e.
+		$$
+		\Pr(X=0)=\Pr(X\in\{0\})=\theta_0,
+		$$
+		y una densidad para la parte continua,
+		$$
+		f(x|\theta_c)=\theta_c\exp\{-x\theta_c\}\mathbb{I}_{(0,\infty)}(x),
+		$$
+		con $0<\theta_0<1$ y $\theta_c>0$.
+		}
+ 		\end{block}  		
+
+		\begin{block}<+->{Ejercicio}
+	  	{
+	  	\textcolor{red}{?`Qu\'e forma toma $F(x|\theta)$ y qui\'en es $\theta$?}
+		}
+ 		\end{block}  		
+
+		}
+	}
+
+
+	%	--------------------------------------------
+	%	section
+	%	--------------------------------------------
+	\subsection{Verosimilitud}
+	%	-------------		FRAME		--------------------
+	\frame
+	{
+    \frametitle{Ejemplo}
+  		{\scriptsize  	
+		
+Ahora, incorporaci\'on de datos (informaci\'on)...		
+
+\vfill
+
+	  	Consideremos un conjunto de datos $X_1=x_1,\ldots,X_n=x_n$ (no \'atomos) en el caso absolutamente continuo.
+	  	
+
+		}
+	}
+	
+	%	-------------		FRAME		--------------------
+	\frame
+	{
+    \frametitle{Verosimilitud}
+  		{\scriptsize  	
+		
+		\begin{block}<+->{Funci\'on de verosimilitud}
+	  	{
+	  	\begin{itemize}
+	  		\item Enfoque frecuentista: Independencia
+	  		\begin{equation}
+	  		 \Pr(X_1=x_1,\ldots,X_n=x_n;\theta) = \prod_{i=1}^{n} f(x_i;\theta).
+	  		\end{equation}
+	  		\item Enfoque bayesiano: Independencia condicional 
+	  		\begin{equation}
+	  		 \Pr(X_1=x_1,\ldots,X_n=x_n) = \int \prod_{i=1}^{n} f(x_i|\theta) \pi(\theta) \dd \theta.
+	  		\end{equation}
+	  	\end{itemize}
+	  	}
+ 		\end{block}  		
+
+	  	\vspace{0.3cm}
+		\begin{block}<+->{Ejercicio}
+	  	{
+	  	\textcolor{red}{?`C\'omo ser\'a la expresi\'on de la funci\'on de verosimilitud en el caso discreto y tipo mixta?}
+	  	}
+ 		\end{block}  		
+		}
+	}
+
+	%	-------------		FRAME		--------------------
+	\frame
+	{
+    \frametitle{Verosimilitud}
+  		{\scriptsize  	
+		
+		\begin{block}<+->{Tipos de datos}
+	  	{
+	  	\begin{itemize}
+	  		\item Las expresiones anteriores son correctas cuando los datos son exactos. 
+	  		\item Cuando trabajamos con datos agrupados en $\Re_+$, modificamos el soporte $\mathcal{X}$ por una partici\'on $\{c_j\}_{j=1}^{J}$ tal que, 
+	  		\begin{equation}
+	  			c_1 < c_2 < \ldots <c_J,
+	  		\end{equation}
+	  		sustituyendo $\mathcal{X}$ por el conjunto,
+	  		\begin{equation}
+	  			\mathcal{C}=\{ (c_{j},c_{j+1}]: c_j < c_{j+1}, j=1,\ldots,J\}.
+	  		\end{equation}
+	  		
+	  	\end{itemize}
+	  	}
+ 		\end{block}  		
+
+	  	\vspace{0.3cm}
+		\begin{block}<+->{Ejercicio}
+	  	{
+	  	\textcolor{red}{?`C\'omo ser\'a la expresi\'on de la funci\'on de verosimilitud para datos agrupados?}
+	  	}
+ 		\end{block}  		
+
+		}
+	}
+
+	%	--------------------------------------------
+	%	section
+	%	--------------------------------------------
+	\subsection{Conjugacidad}
+	%	-------------		FRAME		--------------------
+	\frame
+	{
+    \frametitle{Distribuciones conjugadas}
+  		{\scriptsize  	
+		
+	  	En el an\'alisis bayesiano de datos, el uso de familias conjugadas entre $f(x|\theta)$ y $\pi(\theta)$ es de utilidad para obtener expresiones ana\l\'iticas cerradas en el proceso de aprendizaje.
+	  	
+		\begin{block}<+->{Familia Exponencial}
+	  	{
+	  	Las familias conjugadas est\'an definidas dentro de la  Familia Exponencial de Distribuciones (lineal), para las que la funci\'on de densidad o masa de probabilidad admiten la siguiente expresi\'on,
+	  	\begin{equation}
+	  		f(x|\theta) = p(x) q(\theta)^{-1} exp\{-\theta x\},
+	  	\end{equation}
+	  	considerando que el soporte $\mathcal{X}$ no depende de $\theta$.
+	  	}
+ 		\end{block}  		
+
+	  	\vspace{0.3cm}
+		\begin{block}<+->{Prior conjugada}
+	  	{
+	  	Las distribuci\'on inicial conjugada para la representaci\'on atenrior toma la forma,
+	  	\begin{equation}
+	  		\pi(\theta) = c(k_0,m_0)q(\theta)^{-k_0} exp\{-\theta m_0\},
+	  	\end{equation}
+	  	donde $k_0$ y $m_0$ son hiper par\'ametros.
+	  	}
+ 		\end{block}  		
+
+		}
+	}
+
+	%	--------------------------------------------
+	%	section
+	%	--------------------------------------------
+	\subsection{Predicci\'on}
+	%	-------------		FRAME		--------------------
+	\frame
+	{
+    \frametitle{Predicci\'on}
+  		{\scriptsize  	
+		
+		\begin{block}<+->{Enfoque frecuentista}
+	  	{
+	  	Bajo el enfoque frecuentista, la predicci\'on de un valor futuro de $X$, $X^f$, se obtiene a trav\'es de la imputaci\'on del EMV de $\theta$ en el modelo, i.e.
+	  	\begin{equation}
+	  		X^f|x_1\ldots,x_n \sim f(x^f|\widehat{\theta}_n),
+	  	\end{equation}
+	  	donde $\widehat{\theta}_n=\widehat{\theta}_n(x_1\ldots,x_n)$.
+	  	}
+ 		\end{block}  		
+
+	  	\vspace{0.3cm}
+		\begin{block}<+->{Enfoque bayesiano}
+	  	{
+	  	Bajo el enfoque bayesiano, la predicci\'on se obtiene usando argumentos probabilistas, como
+	  	\begin{equation}
+	  		p(x^f|x_1\ldots,x_n) = \int_{\Theta} f(x^f|\theta) \pi(\theta|x_1\ldots,x_n)\dd \theta,
+	  	\end{equation}
+	  	donde $\pi(\theta|x_1\ldots,x_n) \propto f(x_1\ldots,x_n|\theta)\pi(\theta)$ es la distribuci\'on de $\theta$ actualizada con la informaci\'on contenida en $x_1\ldots,x_n$.
+	  	}
+ 		\end{block}  		
+
+	  	\vspace{0.3cm}
+		\begin{block}<+->{Ejercicio}
+	  	{
+	  	\textcolor{red}{Muestra que el modelo Bernoulli-beta, visto en las clases previas, es un tipo de distribuciones conjugadas.}
+	  	}
+ 		\end{block}  		
+
+		}
+	}
+
+	%	--------------------------------------------
+	%	section
+	%	--------------------------------------------
+	\subsection{Intercambiabilidad}
+	%	-------------		FRAME		--------------------
+	\frame
+	{
+    \frametitle{Intercambiabilidad}
+  		{\scriptsize  	
+		
+		\begin{block}<+->{Definici\'on}
+	  	{
+	  	Se dice que un conjunto (numerable) de variables  aleatorias $\{X_j\}_{j=1}^{\infty}$ es intercambiabiable con respecto a $\Pr$ si para todo $n$ finito,
+	  	\begin{equation}
+	  		\Pr(X_1,\ldots,X_n)=\Pr(X_{\sigma(1)},\ldots,X_{\sigma(n)}),
+	  	\end{equation}
+	  	donde $(\sigma(1),\ldots,\sigma(n))$ es cualquier permutaci\'on del vector $(1,\ldots,n)$.
+	  	}
+ 		\end{block}  		
+
+	  	\vspace{0.3cm}
+		\begin{block}<+->{Comentarios}
+	  	{
+	  	\begin{itemize}
+	  		\item Cualquier sucesi\'on de variables aleatorias $\iid$ es naturalmente intercambiable.
+	  		\item La noci\'on de intercambiabilidad, como la de independencia, se refiere a que el orden de la informaci\'on es irrelevante (i.e. los resultados anal\'iticos son
+invariantes ante permutaciones).
+	  	\end{itemize}
+	  	}
+ 		\end{block}  		
+
+	  	\vspace{0.3cm}
+		\begin{block}<+->{Ejercicio}
+	  	{
+	  	\textcolor{red}{Describe un ejemplo donde los datos podr\'ian asociarse con el supuesto de
+intercambiabilidad, mas no con el de independencia. Describe tambi\'en un ejemplo donde ni 
+intercambiabilidad ni independencia ser\'ian supuestos viables.}
+	  	}
+ 		\end{block}  		
+		}
+	}
+
+	%	-------------		FRAME		--------------------
+	\frame
+	{
+    \frametitle{Intercambiabilidad}
+  		{\scriptsize  	
+		
+		\begin{block}<+->{Representaci\'on: de~Finetti}
+	  	{
+	  	Una consecuencia del supuesto de intercambiabilidad (numerable) es el teorema de representaci\'on en el que se admite que para toda sucesi\'on de variables aleatorias
+intercambiables, para toda $n$ finita, se tiene que existe  un ente estoc\'astico $\theta \in \Theta$
+acompa\~nado de una medida de probabilidad $\Pi$, tal que
+	  	\begin{equation}
+	  		\Pr(X_1,\ldots,X_n)=\int_{\Theta} \left\{ \prod_{j=1}^{n} \Pr(X_j|\theta) \right\} \Pi(\dd \theta),
+	  	\end{equation}
+	  	donde $(\sigma(1),\ldots,\sigma(n))$ es cualquier permutaci\'on del vector $(1,\ldots,n)$.
+	  	}
+ 		\end{block}  		
+
+	  	\vspace{0.3cm}
+		\begin{block}<+->{Comentarios}
+	  	{
+	  	\begin{itemize}
+	  		\item El resultado anterior es de {\em existencia}, i.e. no nombra c\'omo se lleva a cabo tal representaci\'on.
+	  		\item Para un conjunto de variables aleatorias intercambiables existen m\'as de una posible representaci\'on como la anterior (en t\'erminos de diferentes
+especificaciones de $\theta$ y/o de $\Pi$).
+			\item Este teorema de representaci\'on brinda una interpretaci\'on al paradigma bayesiano de inferencia.
+	  	\end{itemize}
+	  	}
+ 		\end{block}  		
+
+		}
+	}
+
+	%	--------------------------------------------
+	%	section
+	%	--------------------------------------------
+	\subsection{Ejercicio para casa}
+	%	-------------		FRAME		--------------------
+	\frame
+	{
+    \frametitle{Ejercicio para casa}
+  		{\scriptsize  	
+		Consideremos el caso sencillo donde $X$ es discreta con soporte en $\mathcal{X}=\{0,1\}$.
+		\begin{enumerate}
+		  \item Defina el modelo de probabilidad para $X$. 
+		  \item Identifique el par\'ametro del modelo.
+		  \item Defina la varosimilitud para el par\'ametro basado en el supuesto de $independencia$ con base en tres datos $x_1=1$, $x_2=1$ y $x_3=1$.
+		  \item Calcule la distribuci\'on predictiva para $X_4$.
+		  \item Examine la forma gen\'erica de la funci\'on de verosimilitud para el par\'ametro del modelo.
+		  \item Identifique la distribucion $\Pi$ conjugada.
+		  \item Calcule la distribuci\'on predictiva para $X_4$ usando los mismos datos empleados anteriormente, $x_1,x_2,x_3$.
+		\end{enumerate}
+		}
+	}
+
+%	--------------------------------------------
+%	--------------------------------------------
+%	section
+%	--------------------------------------------
+%	--------------------------------------------
+\section*{ }
+\frame
+{\scriptsize
+	\begin{center}
+		\textcolor{MyDarkOrange}{\huge }
+		
+		\vspace{1.7cm}
+		\textcolor{MyDarkBlue}{\Large Gracias por su atenci\'on...}
+		
+		\vspace{1.3cm}
+		\textcolor{MyDarkGreen}{\large \tt juan.martinez.ovando@itam.mx}
+		
+	\end{center}
+}
+\end{document}
+
+%
+%	--	FIN	--
