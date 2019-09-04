@@ -383,226 +383,25 @@ points(ab0dist[,1],ab0dist[,2],col=2);abline(h=0,col=3)
 
 ## Agregacion de variables aleatorias Poisson
 
-Supongamos que $N_1,\ldots,N_q$ son variables aleatorias independientes con distribucion Poisson, $\text{Po}(N_j=n_j|\lambda_j)$, respectivamente, con $\lambda_j$s posiblemente diferentes. Se sigue,  
-	  	\begin{itemize}
-	  		\item $N = \sum_{j=1}^{q}N_j$ se distribuye Poisson
-	  		\item $N$ tiene tasa de intensidad $\lambda=\sum_{j=1}^{q}\lambda_j$
-	  	\end{itemize}
-	  	
+Supongamos que $N_1,\ldots,N_M$ son variables aleatorias independientes con distribucion Poisson, $\text{Po}(N_m=n_m|\lambda_m)$, respectivamente, con $\lambda_m$s posiblemente diferentes. Se sigue,  
+
+* $N = \sum_{m=1}^{M}N_m$ se distribuye Poisson
+
+* $N$ tiene tasa de intensidad $\lambda=\sum_{m=1}^{M}\lambda_m$.
+
+> Este es un **teorema importante** relacionado con el tema de diversificacion y agregacion de riesgos.
 
 ## Desagregacion de variables aleatorias Poisson
 
-Supongamos que $N \sim \text{Po}(n|\lambda)$, con $\lambda > 0$, y consideremos que los eventos pueden clasificarse en $m$ tipos distintos independientes, con probabilidades $p_1,\ldots,p_m$. Se sigue,
-	  	\begin{itemize}
-	  		\item $N_j$s, que son los numeros de eventos en cada clase, son mutuamente independientes
-	  		\item Cada $N_j$ tiene distribucion $\text{Po}(n|\lambda_j)$, con $\lambda_j=p_j\lambda$
-	  	\end{itemize}
+Supongamos que $N \sim \text{Po}(n|\lambda)$, con $\lambda > 0$, y consideremos que los eventos pueden clasificarse en $K$ tipos distintos independientes (pero **no conocidos**), con probabilidades $w_1,\ldots,w_K$. Entonces, condicional en $N=n$, se sigue,
 
-
-# Modificacion de distribuciones
-
-Recordemos que $N_t$ denota el numero de siniestros de un periodo de operacion $t$.
-
-Usualmente concebimos el soporte de $N_t$ de dos formas:
-
-1. **Riesgo individual.-** Suponiendo que cada poliza puede siniestrarse a lo mas una vez en $t$, tenemos un **soporte finito**
-$$
-\mathcal{N}=\{0,1,2,\ldots,J_t\}.
-$$
-2. **Riesgo colectivo.-** Suponiendo que cada poliza puede siniestrarse mas de una vez en $t$, tenemos un **soporte numerable**
-$$
-\mathcal{N}=\{0,1,2,\ldots\}.
-$$
-
-## Masas de probabilidades
-
-
-En ambos enfoques para $\mathcal{N}$ tenemos un conjunto de *masas de probabilidades*,
-$$
-\left(p_n\right)_{n\in\mathcal{N}},
-$$
-donde 
-$$
-p_n:=\mathbb{P}(N_t=n),
-$$
-para todo $n\in\mathcal{N}$.
-
-* El **modelo libre de supuestos estructurales** considera la coleccion de $\left(p_n\right)_{n\in\mathcal{N}}$ como **pamametros del modelo**.
-
-## Comentarios
-
-* Si las $\left(p_n\right)_{n\in\mathcal{N}}$ (a.k.a. el **modelo de probabilidad**) pertenece a la clase $(a,b,0)$, hemos visto que las $p_n$s siguen un patron especifico en $n$.
-
-* En el caso anterior, se dice que **el modelo es parametrico**, en cuyo caso se remplaza el numero de parametros libres $\#\{\mathcal{N}\}$ por **tres parametros (a lo mas)**, $(p_0,a,b)$.
-
-> Lo anterior resulta en una simplificacion estructural considerable.
-
-> En ocasiones, necesitaremos definir cambios/alteraciones en las masas de probabilidad asignadas por las $p_n$s. Estas alteraciones se conocen como **modificacion de distribuciones de probabilidad**
-
-## Definicion de modificaciones
-
-La **modificacion de distribuciones** para la *frecuencia de siniestros* consiste en definir un mapeo,
-$$
-(p_n)_{n\in\mathcal{N}} \rightarrow (q_n)_{n\in\mathcal{M}}
-$$
-donde $(q_n)_{n\in\mathcal{M}}$ define una nueva coleccion de masas de probabiliad.
-
-### Observaciones
-
-* La modificar las masas de probabilidad, reasignamos probabilidades a eventos semejantes.
-
-* La modificacion puede implicar un *cambio en el soporte* (particularmente inducido cuando algunas $p_n$s se colapsas a cero).
-
-* La modificacion puede romper/alterar los patrones recursivos de las $p_n$s originales.
-
-## Distribuciones $0$ modificadas 1
-
-
-Un tipo de modificacioes ampliamente usada en ciencias actuariales es la modificacion en $0$, i.e. se modifican las $p_n$s para garantizar que 
-$$
-\mathbb{P}(N_t=0)=q_0,
-$$
-con $0<q_0<1$ un valor o parametro arbitrario.
-
-* \textcolor{blue}{Esto es util para modelar la frecuencia de siniestros de datos tipo `AllState`, por ejemplo.}
-
-Los nuevos $(q_n)_{n\in\mathcal{M}}$ deben ser masas de probabilidad, por lo que es necesario que tomen valores en el **simplejo** $\#\mathcal{M}$-dimensional, i.e.
-
-1. $q_n > 0$ para todo $n\in\mathcal{M}$
-
-2. $\sum_{n\in\mathcal{M}}q_n=1$.
-
-
-Siguiendo con la mododificacion en $0$, teniendo el primer elemento mapeado
-$$
-p_0 \rightarrow q_0,
-$$
-procede ahora definir el mapeo para $n\geq 1$. 
-
-\textcolor{blue}{En este caso, necesitamos distribuir el peso restante $(1-q_0)$ en la estructura de masas de probabilidad de las $p_n$s originales.}
-
-**\textcolor{blue}{?`Como hacer eso?}**
-
-> Condicionando y reescalando...
-
-1. Condicionamos respecto a la parte del soporte que no es modificada, i.e.
-$$
-\frac{\mathbb{P}(N_t=n)}{1-\mathbb{P}(N_t=0)}=\frac{p_n}{1-p_0},
-$$
-para $n\geq 1$, i.e. $\sum_{n\geq 1}\frac{p_n}{1-p_0}=1$.
-
-2. Reescalamos respecto a la probabilidad modificada restante, i.e. definimos
-$$
-\mathbb{Q}(N_t=n)=(1-q_0)\frac{p_n}{1-p_0},
-$$
-para $n\geq 1$.
-
-
-De esta forma, las masas de probabilidades originales,
-$$
-\mathbb{P}(N_t=n)=p_n,
-$$
-para $n\in\mathcal{N}$, se modifican para las **nuevas** masas de probabilidades,
-$$
-\mathbb{Q}(N_t=n)=q_n,
-$$
-para $n\in\mathcal{M}$.
-
-* Si $q_0\neq 0$, la modificacion anterior implica que $\mathcal{N}=\mathcal{M}$.
-
-
-## Clase $(a,b,1)$
-
-
-La clase de distribuciones $(a,b,0)$ puede **modificarse** para la clase $(a,b,1)$, en cuyo caso
-$$
-\mathbb{Q}(N_t=0)=0,
-$$
-con 
-$$
-0<q_1<1,
-$$
-valor inicial de la recursion, y 
-$$
-q_n=q_{n-1}\left(a+\frac{b}{n}\right),
-$$
-para todo $n\geq 2$.
-
-* En este caso, el soporte $\mathcal{N}$ queda **modificado** a $\mathcal{M}=\mathcal{N}\setminus \{0\}$.
-
-## Aspectos inferenciales
-
-### Verosimilitud
-
-En todos los casos estudiados para la frecuencia de siniestros, la identificacion del **modelo especifico** (o **modelos diferenciados**) compatibles con un conjunto de `datos`, desacansara en la *funcion de verosimilitud*.
-
-Si $n_1,n_2,\ldots,n_{t-1}$ representan un conjunto de frecuencias de siniestros para $(t-1)$ periodos pasados del modelo, la funcion de verosimilitud para $(p_n)_{n\in\mathcal{N}}$ (caso del modelo sin restricciones), es de la forma
-$$
-lik\left((p_n)_{n\in\mathcal{N}}|n_1,n_2,\ldots,n_{t-1}\right)=p_{n_1}p_{n_2}\cdots p_{n_{t-1}},
-$$
-en cuso caso es posible derivar que el modelo mas compatible con los datos consistiria en el **modelo estimado**,
-$$
-\hat{p}_{n_j}=\frac{n_j}{\sum_{i=1}^{t-1}n_i},
-$$
-para todo $n_j \in \{n_1,n_2,\ldots,n_{t-1}\}$, y 
-$$
-\hat{p}_n=0,
-$$
-para todo $n \notin \{n_1,n_2,\ldots,n_{t-1}\}$.
-
-## Comentarios
-
-
-* La razon por la cual se adoptan modelos parametricos en la practica, es para prevenir tener estimadores de probabilidades `colapsados a` $0$ como en el caso anterior.
-
-## Inferencia en modificaciones
-
-Cuando se desee hacer inferencia en **modificacion de distribuciones**, $(q_n)_{n\mathcal{M}}$, inducidas por una alteracion de las $(p_n)_{n\in\mathcal{N}}$, podemos
-
-1. Definir la *funcion de verosimilitud* para las $(p_n)_{n\in\mathcal{N}}$ originales, derivando los estimadores correspondientes $\hat{p}_n$s; y, entonces, definir
-$$
-\hat{q}_n=q(\hat{p}_n),
-$$
-para $n\mathcal{M}$, con base en el mapeo de la modificacion.
-
-2. Definir la funcion de verosimilitud para las $(q_n)_{n\mathcal{M}}$ directamente, y proceder inferencialmente.
-
-## Binomial-negativa: Representacion tipo mezcla
-
-Un modelo bastante util en la practica representar la `distribucion binomial-negativa` como una *mezcla de una distribucion Poisson*  respecto a una distribucion gamma, i.e.
-$$
-N|\lambda 
-\sim \text{Po}(n|\lambda),
-$$
-$$
-\lambda 
-\sim \text{Ga}(\lambda|a,b).
-$$	  	
-De esta forma,
-$$
-P(N=n)=\int_{0}^{\infty}\text{Po}(n|\lambda)\text{Ga}(\lambda|a,b)d\lambda.
-$$
-
-* Al representar la distribucion binomial negativa como una mezcla puede hacerse inferencia (bayesiana o frecuentista) de manera mas simple. Para esto, invocamos la nocion de *verosimilitud extendida*.
-
-> Esta representacion es originada por una **modificacion de la distribucion Poisson via mezclas.**
+* las frecuencias de siniestros dentro de cada clase, $N_k$s, son mutuamente independientes, para $k=1,\ldots,K$
+  
+* cada $N_k$ tiene distribucion $\text{Po}(n|\lambda_k)$, con $\lambda_k=w_k\lambda$.
 
 # Ejercicio
 
 1. Modifiquen la funcion `Poisson.Plot()` para crear la funcion `BinNeg.Plot()` para generar los resultados analogos de `Poisson.Plot()` y `Binomial.Plot()` incluidas en el markdown de esta presentacion.
-
-2. Realicen el calculo analitico para demostrar la identidad de la distribucion `binomial-negativa` como `mezcla de poisson-gamma`.
-
-3. Deriven la modificacion en $0$ para: 
-
-$$
-N_t| N_t < 15 \sim \text{Bin}(n|100,1/3),
-$$
-y 
-$$
-N_t|N_t \geq 15 \sim \text{Po}(n|30).
-$$
-
 
 # Lecturas complementarias
 
