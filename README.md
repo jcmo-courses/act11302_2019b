@@ -92,14 +92,15 @@ En la carpeta [Bibliografia](https://github.com/JCMO-ITAM/act11302_2019a_carpeta
 
 ## Evaluacion
 
-* Examen parcial 1 (temas 1-4): **25%**
+* Examen parcial: **25%**
 
-* Examen parcial 2 (tema 5): **25%**
+* Tareas/ejercicios: **25%**
 
 * Proyecto practico: **25%**
 
 * Examen final: **25%**
 
+> Todas las evaluaciones, salvo el proyecto practico, son individuales.
 
 ---
 
