@@ -66,7 +66,7 @@ La compilacion de los archivos `*.Rmd` hace uso de [svm-r-markdown-templates](ht
 
 ## Recuros adicionales
 
-Debido a la alta carga analitica en `R` que involucra el curso, sera altamente beneficioso desarrollar habilidades en esta herramienta. Con este proposito, he creado el grupo de trabajo [Calculo Actuarial III](https://www.datacamp.com/enterprise/aggregate-loss-models) en [DataCamp](https://www.datacamp.com/), donde he disenado un track de cursos gratuitos para estudiantes de este curso con miras a desarrollar estas herramientas.
+Debido a la alta carga analitica en `R` que involucra el curso, sera altamente beneficioso desarrollar habilidades en esta herramienta. Con este proposito, he creado el grupo de trabajo [My Class / Aggregate Loss Models](https://www.datacamp.com/enterprise/aggregate-loss-models) en [DataCamp](https://www.datacamp.com/), donde he disenado un track de cursos gratuitos para estudiantes de este curso con miras a desarrollar estas herramientas.
 
 ---
 
