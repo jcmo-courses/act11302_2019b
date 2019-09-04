@@ -80,7 +80,7 @@ En la carpeta [Bibliografia](https://github.com/JCMO-ITAM/act11302_2019a_carpeta
 
 * Klugman *et al* (2012) *Loss Models: From Data to Decisions*. John Wiley & Sons.
 
-* Martinez-Ovando () *Predictive Loss Modeling*.
+* Martinez-Ovando (Mimeo) *Predictive Loss Modeling*.
 
 * Melnikov (2004). *Risk Analysis in Finance and Insurance.* CRC Press. 
 
