@@ -16,7 +16,7 @@ Email profesor: juan.martinez.ovando@itam.mx o jc.martinez.ovando@gmail.com
 
 Atencion a alumnos: 
 
-* Google groups del curso.
+* [Grupo Google](https://groups.google.com/forum/#!forum/act11203_2019b) del curso.
 
 * Previa cita via email.
 
