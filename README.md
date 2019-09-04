@@ -8,17 +8,15 @@ Juan Carlos Martinez-Ovando
 
 ## Informacion general
 
-Horarios de clase: Ma, Ju, 10:00-11:30h.
+Horario de clase: Martes 7:00-10:00h.
 
-Salon: RH-302.
+Salon: RH-317.
 
-Email profesor: juan.martinez.ovando@itam.mx
+Email profesor: juan.martinez.ovando@itam.mx o jc.martinez.ovando@gmail.com
 
 Atencion a alumnos: 
 
-* Ma y Ju, 8:30-10:00h
-
-* Ma y Ju, 11:30-13:00h
+* Google groups del curso.
 
 * Previa cita via email.
 
