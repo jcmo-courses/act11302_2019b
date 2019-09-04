@@ -106,8 +106,6 @@ En la carpeta [Bibliografia](https://github.com/JCMO-ITAM/act11302_2019a_carpeta
 
 ## Material complementario
 
-* Lista de ejercicios [[Link]](https://github.com/jcmartinezovando/act11302/blob/master/Complementarios/act11302_2018b_listaejercicios.pdf)
-
 * Introduccion a R [[Link]](https://cran.r-project.org/doc/contrib/R-intro-1.1.0-espanol.1.pdf)
 
 * Introduccion a RStudio [[Link]](http://webcache.googleusercontent.com/search?q=cache:pA1vwDGajEIJ:wpd.ugr.es/~bioestad/wp-content/uploads/Instalaci%25C3%25B3n-e-introducci%25C3%25B3n-a-R-RStudio-y-R-Commander.pdf+&cd=11&hl=en&ct=clnk&gl=mx&client=firefox-b-ab)
