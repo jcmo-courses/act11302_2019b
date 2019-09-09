@@ -1513,179 +1513,388 @@ div.tocify {
 <hr />
 <div id="objetivos" class="section level1">
 <h1><span class="header-section-number">1</span> Objetivos</h1>
-<p>Esta sesion esta dividida en dos partes:</p>
-<p><code>Parte 1</code> - Enfoques de agregacion de riesgos</p>
-<p><code>Parte 2</code> - Preliminares del aprendizaje estadistico en la agregacion de riesgos</p>
-<p>Los temas claves de estas partes son:</p>
 <ul>
-<li><p>Estudiar las implicaciones de la <code>propiedad de separacion</code> en el proceso inferencia en distribuciones tipo mixtas.</p></li>
-<li><p>Incorporar <code>datos</code> en el proceso de aprendizaje.</p></li>
-<li><p>Incorporar <code>datos</code> e <code>informacion complementaria</code> en el proceso aprendizaje.</p></li>
+<li>Estudiar el proceso de agregacion de riesgos, bajo el enfoque de <code>riesgo individual</code> particularmente.</li>
 </ul>
 <hr />
 </div>
-<div id="modificacion-de-distribuciones" class="section level1">
-<h1><span class="header-section-number">2</span> Modificacion de distribuciones</h1>
-<p>Recordemos que <span class="math inline">\(N_t\)</span> denota el numero de siniestros de un periodo de operacion <span class="math inline">\(t\)</span>.</p>
-<p>Usualmente concebimos el soporte de <span class="math inline">\(N_t\)</span> de dos formas:</p>
-<ol style="list-style-type: decimal">
-<li><strong>Riesgo individual.-</strong> Suponiendo que cada poliza puede siniestrarse a lo mas una vez en <span class="math inline">\(t\)</span>, tenemos un <strong>soporte finito</strong> <span class="math display">\[
-\mathcal{N}=\{0,1,2,\ldots,J_t\}.
-\]</span></li>
-<li><strong>Riesgo colectivo.-</strong> Suponiendo que cada poliza puede siniestrarse mas de una vez en <span class="math inline">\(t\)</span>, tenemos un <strong>soporte numerable</strong> <span class="math display">\[
-\mathcal{N}=\{0,1,2,\ldots\}.
-\]</span></li>
-</ol>
-<div id="masas-de-probabilidades" class="section level2">
-<h2><span class="header-section-number">2.1</span> Masas de probabilidades</h2>
-<p>En ambos enfoques para <span class="math inline">\(\mathcal{N}\)</span> tenemos un conjunto de <em>masas de probabilidades</em>, <span class="math display">\[
-\left(p_n\right)_{n\in\mathcal{N}},
-\]</span> donde <span class="math display">\[
-p_n:=\mathbb{P}(N_t=n),
-\]</span> para todo <span class="math inline">\(n\in\mathcal{N}\)</span>.</p>
-<ul>
-<li>El <strong>modelo libre de supuestos estructurales</strong> considera la coleccion de <span class="math inline">\(\left(p_n\right)_{n\in\mathcal{N}}\)</span> como <strong>pamametros del modelo</strong>.</li>
-</ul>
-</div>
-<div id="comentarios" class="section level2">
-<h2><span class="header-section-number">2.2</span> Comentarios</h2>
-<ul>
-<li><p>Si las <span class="math inline">\(\left(p_n\right)_{n\in\mathcal{N}}\)</span> (a.k.a. el <strong>modelo de probabilidad</strong>) pertenece a la clase <span class="math inline">\((a,b,0)\)</span>, hemos visto que las <span class="math inline">\(p_n\)</span>s siguen un patron especifico en <span class="math inline">\(n\)</span>.</p></li>
-<li><p>En el caso anterior, se dice que <strong>el modelo es parametrico</strong>, en cuyo caso se remplaza el numero de parametros libres <span class="math inline">\(\#\{\mathcal{N}\}\)</span> por <strong>tres parametros (a lo mas)</strong>, <span class="math inline">\((p_0,a,b)\)</span>.</p></li>
-</ul>
-<blockquote>
-<p>Lo anterior resulta en una simplificacion estructural considerable.</p>
-</blockquote>
-<blockquote>
-<p>En ocasiones, necesitaremos definir cambios/alteraciones en las masas de probabilidad asignadas por las <span class="math inline">\(p_n\)</span>s. Estas alteraciones se conocen como <strong>modificacion de distribuciones de probabilidad</strong></p>
-</blockquote>
-</div>
-<div id="definicion-de-modificaciones" class="section level2">
-<h2><span class="header-section-number">2.3</span> Definicion de modificaciones</h2>
-<p>La <strong>modificacion de distribuciones</strong> para la <em>frecuencia de siniestros</em> consiste en definir un mapeo, <span class="math display">\[
-(p_n)_{n\in\mathcal{N}} \rightarrow (q_n)_{n\in\mathcal{M}}
-\]</span> donde <span class="math inline">\((q_n)_{n\in\mathcal{M}}\)</span> define una nueva coleccion de masas de probabiliad.</p>
-<div id="observaciones" class="section level3">
-<h3><span class="header-section-number">2.3.1</span> Observaciones</h3>
-<ul>
-<li><p>La modificar las masas de probabilidad, reasignamos probabilidades a eventos semejantes.</p></li>
-<li><p>La modificacion puede implicar un <em>cambio en el soporte</em> (particularmente inducido cuando algunas <span class="math inline">\(p_n\)</span>s se colapsas a cero).</p></li>
-<li><p>La modificacion puede romper/alterar los patrones recursivos de las <span class="math inline">\(p_n\)</span>s originales.</p></li>
-</ul>
-</div>
-</div>
-<div id="distribuciones-0-modificadas-1" class="section level2">
-<h2><span class="header-section-number">2.4</span> Distribuciones <span class="math inline">\(0\)</span> modificadas 1</h2>
-<p>Un tipo de modificacioes ampliamente usada en ciencias actuariales es la modificacion en <span class="math inline">\(0\)</span>, i.e. se modifican las <span class="math inline">\(p_n\)</span>s para garantizar que <span class="math display">\[
-\mathbb{P}(N_t=0)=q_0,
-\]</span> con <span class="math inline">\(0&lt;q_0&lt;1\)</span> un valor o parametro arbitrario.</p>
-<ul>
-<li></li>
-</ul>
-<p>Los nuevos <span class="math inline">\((q_n)_{n\in\mathcal{M}}\)</span> deben ser masas de probabilidad, por lo que es necesario que tomen valores en el <strong>simplejo</strong> <span class="math inline">\(\#\mathcal{M}\)</span>-dimensional, i.e.</p>
-<ol style="list-style-type: decimal">
-<li><p><span class="math inline">\(q_n &gt; 0\)</span> para todo <span class="math inline">\(n\in\mathcal{M}\)</span></p></li>
-<li><p><span class="math inline">\(\sum_{n\in\mathcal{M}}q_n=1\)</span>.</p></li>
-</ol>
-<p>Siguiendo con la mododificacion en <span class="math inline">\(0\)</span>, teniendo el primer elemento mapeado <span class="math display">\[
-p_0 \rightarrow q_0,
-\]</span> procede ahora definir el mapeo para <span class="math inline">\(n\geq 1\)</span>.</p>
-<p></p>
-<p><strong></strong></p>
-<blockquote>
-<p>Condicionando y reescalando…</p>
-</blockquote>
-<ol style="list-style-type: decimal">
-<li><p>Condicionamos respecto a la parte del soporte que no es modificada, i.e. <span class="math display">\[
-\frac{\mathbb{P}(N_t=n)}{1-\mathbb{P}(N_t=0)}=\frac{p_n}{1-p_0},
-\]</span> para <span class="math inline">\(n\geq 1\)</span>, i.e. <span class="math inline">\(\sum_{n\geq 1}\frac{p_n}{1-p_0}=1\)</span>.</p></li>
-<li><p>Reescalamos respecto a la probabilidad modificada restante, i.e. definimos <span class="math display">\[
-\mathbb{Q}(N_t=n)=(1-q_0)\frac{p_n}{1-p_0},
-\]</span> para <span class="math inline">\(n\geq 1\)</span>.</p></li>
-</ol>
-<p>De esta forma, las masas de probabilidades originales, <span class="math display">\[
-\mathbb{P}(N_t=n)=p_n,
-\]</span> para <span class="math inline">\(n\in\mathcal{N}\)</span>, se modifican para las <strong>nuevas</strong> masas de probabilidades, <span class="math display">\[
-\mathbb{Q}(N_t=n)=q_n,
-\]</span> para <span class="math inline">\(n\in\mathcal{M}\)</span>.</p>
-<ul>
-<li>Si <span class="math inline">\(q_0\neq 0\)</span>, la modificacion anterior implica que <span class="math inline">\(\mathcal{N}=\mathcal{M}\)</span>.</li>
-</ul>
-</div>
-<div id="clase-ab1" class="section level2">
-<h2><span class="header-section-number">2.5</span> Clase <span class="math inline">\((a,b,1)\)</span></h2>
-<p>La clase de distribuciones <span class="math inline">\((a,b,0)\)</span> puede <strong>modificarse</strong> para la clase <span class="math inline">\((a,b,1)\)</span>, en cuyo caso <span class="math display">\[
-\mathbb{Q}(N_t=0)=0,
-\]</span> con <span class="math display">\[
-0&lt;q_1&lt;1,
-\]</span> valor inicial de la recursion, y <span class="math display">\[
-q_n=q_{n-1}\left(a+\frac{b}{n}\right),
-\]</span> para todo <span class="math inline">\(n\geq 2\)</span>.</p>
-<ul>
-<li>En este caso, el soporte <span class="math inline">\(\mathcal{N}\)</span> queda <strong>modificado</strong> a <span class="math inline">\(\mathcal{M}=\mathcal{N}\setminus \{0\}\)</span>.</li>
-</ul>
-</div>
-<div id="aspectos-inferenciales" class="section level2">
-<h2><span class="header-section-number">2.6</span> Aspectos inferenciales</h2>
-<div id="verosimilitud" class="section level3">
-<h3><span class="header-section-number">2.6.1</span> Verosimilitud</h3>
-<p>En todos los casos estudiados para la frecuencia de siniestros, la identificacion del <strong>modelo especifico</strong> (o <strong>modelos diferenciados</strong>) compatibles con un conjunto de <code>datos</code>, desacansara en la <em>funcion de verosimilitud</em>.</p>
-<p>Si <span class="math inline">\(n_1,n_2,\ldots,n_{t-1}\)</span> representan un conjunto de frecuencias de siniestros para <span class="math inline">\((t-1)\)</span> periodos pasados del modelo, la funcion de verosimilitud para <span class="math inline">\((p_n)_{n\in\mathcal{N}}\)</span> (caso del modelo sin restricciones), es de la forma <span class="math display">\[
-lik\left((p_n)_{n\in\mathcal{N}}|n_1,n_2,\ldots,n_{t-1}\right)=p_{n_1}p_{n_2}\cdots p_{n_{t-1}},
-\]</span> en cuso caso es posible derivar que el modelo mas compatible con los datos consistiria en el <strong>modelo estimado</strong>, <span class="math display">\[
-\hat{p}_{n_j}=\frac{n_j}{\sum_{i=1}^{t-1}n_i},
-\]</span> para todo <span class="math inline">\(n_j \in \{n_1,n_2,\ldots,n_{t-1}\}\)</span>, y <span class="math display">\[
-\hat{p}_n=0,
-\]</span> para todo <span class="math inline">\(n \notin \{n_1,n_2,\ldots,n_{t-1}\}\)</span>.</p>
-</div>
-</div>
-<div id="comentarios-1" class="section level2">
-<h2><span class="header-section-number">2.7</span> Comentarios</h2>
-<ul>
-<li>La razon por la cual se adoptan modelos parametricos en la practica, es para prevenir tener estimadores de probabilidades <code>colapsados a</code> <span class="math inline">\(0\)</span> como en el caso anterior.</li>
-</ul>
-</div>
-<div id="inferencia-en-modificaciones" class="section level2">
-<h2><span class="header-section-number">2.8</span> Inferencia en modificaciones</h2>
-<p>Cuando se desee hacer inferencia en <strong>modificacion de distribuciones</strong>, <span class="math inline">\((q_n)_{n\mathcal{M}}\)</span>, inducidas por una alteracion de las <span class="math inline">\((p_n)_{n\in\mathcal{N}}\)</span>, podemos</p>
-<ol style="list-style-type: decimal">
-<li><p>Definir la <em>funcion de verosimilitud</em> para las <span class="math inline">\((p_n)_{n\in\mathcal{N}}\)</span> originales, derivando los estimadores correspondientes <span class="math inline">\(\hat{p}_n\)</span>s; y, entonces, definir <span class="math display">\[
-\hat{q}_n=q(\hat{p}_n),
-\]</span> para <span class="math inline">\(n\mathcal{M}\)</span>, con base en el mapeo de la modificacion.</p></li>
-<li><p>Definir la funcion de verosimilitud para las <span class="math inline">\((q_n)_{n\mathcal{M}}\)</span> directamente, y proceder inferencialmente.</p></li>
-</ol>
-</div>
-<div id="binomial-negativa-representacion-tipo-mezcla" class="section level2">
-<h2><span class="header-section-number">2.9</span> Binomial-negativa: Representacion tipo mezcla</h2>
-<p>Un modelo bastante util en la practica representar la <code>distribucion binomial-negativa</code> como una <em>mezcla de una distribucion Poisson</em> respecto a una distribucion gamma, i.e. <span class="math display">\[
-N|\lambda 
-\sim \text{Po}(n|\lambda),
-\]</span> <span class="math display">\[
-\lambda 
-\sim \text{Ga}(\lambda|a,b).
-\]</span><br />
-De esta forma, <span class="math display">\[
-P(N=n)=\int_{0}^{\infty}\text{Po}(n|\lambda)\text{Ga}(\lambda|a,b)d\lambda.
+<div id="convoluciones-y-distribuciones-compuestas" class="section level1">
+<h1><span class="header-section-number">2</span> Convoluciones y distribuciones compuestas</h1>
+<div id="definicion" class="section level2">
+<h2><span class="header-section-number">2.1</span> Definicion</h2>
+<p>La <em>composicion de distribuciones</em> surge como distribucion de <em>sumas de variables aleatorias</em>.</p>
+<p>Sean <span class="math inline">\(N_{1},\ldots,N_M\)</span> variables aleatorias no negativas con soporte en los entreros, i.e. <span class="math inline">\(\mathcal{N}=\{0,1,\ldots\}\)</span>. Definimos la suma de estas variables como <span class="math display">\[
+S=\sum_{m=1}^{M}N_m.
 \]</span></p>
+<div id="casos" class="section level3">
+<h3><span class="header-section-number">2.1.1</span> Casos</h3>
 <ul>
-<li>Al representar la distribucion binomial negativa como una mezcla puede hacerse inferencia (bayesiana o frecuentista) de manera mas simple. Para esto, invocamos la nocion de <em>verosimilitud extendida</em>.</li>
+<li>Si <span class="math inline">\(M\)</span> es en si mismo un entero no negativo aleatorio, y <span class="math inline">\(M\)</span> es independiente estocasticamente de <span class="math inline">\(N_1,\ldots,N_M\)</span>; se dice que la distriucion de <span class="math inline">\(S\)</span> es una <strong>distribucion compuesta.</strong></li>
 </ul>
 <blockquote>
-<p>Esta representacion es originada por una <strong>modificacion de la distribucion Poisson via mezclas.</strong></p>
+<p>Este es el caso del <code>enfoque de riesgo colectivo</code>.</p>
+</blockquote>
+<ul>
+<li>Si <span class="math inline">\(M\)</span> es una constante, i.e. la distribucion de <span class="math inline">\(M\)</span> es degenerada en un numero particular, <span class="math inline">\(m\)</span>, entonces la distribucion de <span class="math inline">\(S\)</span> es una <strong>convolucion.</strong></li>
+</ul>
+<blockquote>
+<p>Este es el caso del <code>enfoque de riesgo individual</code>.</p>
 </blockquote>
 </div>
-</div>
-<div id="ejercicio" class="section level1">
-<h1><span class="header-section-number">3</span> Ejercicio</h1>
-<ol style="list-style-type: decimal">
-<li>Modifiquen la funcion <code>Poisson.Plot()</code> para crear la funcion <code>BinNeg.Plot()</code> para generar los resultados analogos de <code>Poisson.Plot()</code> y <code>Binomial.Plot()</code> incluidas en el markdown de esta presentacion.</li>
+<div id="componentes" class="section level3">
+<h3><span class="header-section-number">2.1.2</span> Componentes</h3>
+<ol style="list-style-type: lower-alpha">
+<li><p><em>Distribucion primaria:</em> <span class="math inline">\(M\sim F_M(m)\)</span></p></li>
+<li><p><em>Distribucion secundaria:</em> <span class="math inline">\(N_1,\ldots,N_M\sim^{iid} F_N(n)\)</span></p></li>
 </ol>
 </div>
-<div id="lecturas-complementarias" class="section level1">
-<h1><span class="header-section-number">4</span> Lecturas complementarias</h1>
+</div>
+<div id="caso-sencillo" class="section level2">
+<h2><span class="header-section-number">2.2</span> Caso sencillo</h2>
+<p>Pensemos que <span class="math inline">\(F_M(m)\)</span> es una distribucion degenerada en <span class="math inline">\(m^*&gt;1\)</span>. En particular, pensemos que <span class="math inline">\(m^*=2\)</span>. En este caso <span class="math inline">\(S\)</span> es la suma de <em>dos</em> componentes aleatorios, <span class="math display">\[
+S=N_1+N_2.
+\]</span> La distribucion de <span class="math inline">\(S\)</span> la podemos encontrar como la identificacion de las masas de probabilidades <span class="math display">\[\begin{eqnarray}
+p_S(s) &amp; = &amp; \mathbb{P}(N_1+N_2=s)=\mathbb{P}(N_1=s-N_2)\nonumber\\
+&amp;=&amp;\sum_{n=0}^{s}\mathbb{P}(N_1=s-n,N_2=n).\nonumber
+\end{eqnarray}\]</span></p>
+<hr />
+</div>
+</div>
+<div id="enfoque-de-riesgo-individual" class="section level1">
+<h1><span class="header-section-number">3</span> Enfoque de riesgo individual</h1>
+<p>Recordemos, en el modelo de riesgo individual, suponemos que el reclamo de la poliza <span class="math inline">\(j\)</span> es denotado por <span class="math inline">\(X_j\)</span>, la cual tiene soporte en <span class="math display">\[
+\mathcal{X}=\{0\} \cup (0,\infty),
+\]</span> para <span class="math inline">\(j=1,\ldots,J_t\)</span>, para un momento del tiempo <span class="math inline">\(t\)</span>, con <span class="math inline">\(t\geq 1\)</span>.</p>
+<p>La variable <span class="math inline">\(J_t\)</span> en este caso es <strong>conocida</strong> y <strong>fija</strong> en cada tiempo <span class="math inline">\(t\)</span>. Tipicamente representa el total de suscripcion del portafolio de seguros en el periodo de tiempo correspondiente.</p>
+<hr />
+<p><strong>Supuesto</strong></p>
+<p>Tradicionalmente se supone en cada periodo de tiempo <span class="math inline">\(t\)</span> los reclamos <span class="math inline">\(X_{tj}\)</span>s son <em>independientes</em> y <em>homogeneos en distribucion</em> (i.i.d.), con distribucion marginal data por la distribucion tipo mezcla, <span class="math display">\[
+F_X(x)=\theta\delta_{\{0\}}(x)+(1-\theta)F^{c}_X(x),
+\]</span><br />
+donde <span class="math display">\[\theta = \mathbb{P}(\text{no siniestro})\]</span> y <span class="math display">\[F^{c}_X(x)=\mathbb{P}\left(X\leq x|\text{siniestro}\right)\]</span> representa la <code>parte continua</code> de la distribucion, con soporte en <span class="math inline">\((0,\infty)\)</span>.</p>
+<hr />
+</div>
+<div id="monto-agregado" class="section level1">
+<h1><span class="header-section-number">4</span> Monto agregado</h1>
+<p>Asi, para el periodo de tiempo <span class="math inline">\(t\)</span>, el monto agregado de reclamos del portafolio de tamano <span class="math inline">\(J_t\)</span> se define como <span class="math display">\[
+S_t = \sum_{j=1}^{J_t} X_{tj}.
+\]</span> Siendo que <span class="math inline">\(J_t\)</span> se considera como un parametro fijo en el modelo, tenemos que <span class="math display">\[\begin{eqnarray}
+\mathbb{E}(S_t) 
+  &amp; = &amp; J_t\mathbb{E}(X) 
+  \nonumber \\
+var(S_t) 
+  &amp; = &amp; J_t var(X),
+  \nonumber 
+\end{eqnarray}\]</span></p>
+<p>Denotando los primeros dos momentos de los montos individuales de siniestros como <span class="math display">\[\mu_X = \mathbb{E}\left(X|\text{siniestro}\right)\]</span> y <span class="math display">\[\sigma_X^{2}=var\left(X|\text{siniestro}\right),\]</span> se obtiene una simplificacion de las ecuaciones enteriores.</p>
+<hr />
+<p>Siendo las severidades individuales <span class="math inline">\(X_{tj}\)</span> variables aleatorias del tipo mixta, se tiene que <span class="math display">\[\begin{eqnarray}
+\mathbb{E}(S_t) 
+  &amp; = &amp; J_t(1-\theta)\mu_{X} 
+  \nonumber \\
+var(S_t) 
+  &amp; = &amp; J_t \left(\mu^{2}_X\theta(1-\theta) + (1-\theta)\sigma_{X}^{2}\right). 
+  \nonumber 
+\end{eqnarray}\]</span></p>
+<p>Aunque el calculo del primer y segundo momentos de <span class="math inline">\(S_t\)</span> es simple, <strong>necesitamos</strong> cuantificar la incertidumbre completa de <span class="math inline">\(S_t\)</span> a traves de su distribucion exacta, <span class="math display">\[
+F_{S_t}(s) = \mathbb{P}\left(\sum_{j=1}^{J_t}X_{tj} \leq s\right),
+\]</span> inducida por <span class="math inline">\(F_X(x)\)</span>.</p>
+<hr />
+</div>
+<div id="procedimientos" class="section level1">
+<h1><span class="header-section-number">5</span> Procedimientos</h1>
+<p>Hemos visto que esta puede calcularse a traves del siguientes metodos:</p>
+<p>A. Convolucion directa</p>
+<p>B. Metodo de momentos</p>
+<p>C. Simulacion estocastica</p>
+<p>D. Aproximacion analitica</p>
+<p>E. Recursion</p>
+<hr />
+<div id="a-convoluciones" class="section level2">
+<h2><span class="header-section-number">5.1</span> A) Convoluciones</h2>
+<p>Supongamos que <span class="math inline">\((X_{tj})_{j=1}^{J_t}\)</span> son variables aleatorias independientes e identicamente distribuidas, con funcion de distribucion <span class="math inline">\(F_X(x)\)</span> y soporte en <span class="math inline">\(\mathcal{X}=(0,\infty)\)</span>.</p>
+<p><strong>Caso</strong> <span class="math inline">\(N=2\)</span></p>
+<p>Consideremos el caso donde definimos <span class="math display">\[
+S_t=X_{t1}+X_{t2}.
+\]</span></p>
+<p>De manera general, para soportes de <span class="math inline">\(\mathcal{X}\)</span>en <span class="math inline">\(\Re\)</span>, se tiene que, <span class="math display">\[\begin{eqnarray}
+ \mathbb{P}(S_t\leq s) 
+   &amp; = &amp;
+   \mathbb{P}(X_{t1}+X_{t2}\leq s)
+   \nonumber \\
+   &amp; = &amp;
+   \int_{\mathcal{X}} \mathbb{P}(X_{t1}+X_{t2}\leq s|X_{t2}=x)\mathbb{P}(X_{t2} \in dx)
+   \nonumber \\
+   &amp; = &amp;
+   \int_{\mathcal{X}} F_{X}(s-x)F_X(d x)
+   \nonumber \\
+   &amp; = &amp;   
+   \int_{\mathcal{X}} F_{X}(s-x)f_X(x) dx
+   \nonumber \\
+   &amp; = &amp;   
+   F_X*F_X(s)
+   \nonumber \\
+   &amp; = &amp;   
+   F^{*(2)}_X(s).
+   \label{eq_convolution}
+\end{eqnarray}\]</span></p>
+<hr />
+<p>Ahora bien, si <span class="math inline">\(X\)</span> tiene soporte en <span class="math inline">\((0,\infty)\)</span>, entonces <span class="math inline">\(F_X(x)\)</span> est&#39;a determinada por la funci&#39;on indicadora <span class="math inline">\(\mathbb{I}_{(0,\infty)}(x)\)</span>, mientras que <span class="math inline">\(F_X(s-x)\)</span> estar&#39;a determinada por <span class="math inline">\(\mathbb{I}_{(0,\infty)}(s-x)\)</span>, en cuyo caso la integral () se convierte en, <span class="math display">\[\begin{eqnarray}
+\mathbb{P}(S_t\leq s) 
+&amp; = &amp;
+\mathbb{P}(X_{t1}+X_{t2}\leq s)
+\nonumber \\
+&amp; = &amp;   
+\int_{0}^{s} F_{X}(s-x)f_X(x) dx
+\nonumber \\
+&amp; = &amp;   
+F_X*F_X(s)
+\nonumber \\
+&amp; = &amp;   
+F^{*(2)}_X(s).
+\label{eq_convolution_positive}
+\end{eqnarray}\]</span></p>
+<hr />
+<p>Siguiendo lo anterior se tiene que en el <em>ejemplo</em> donde <span class="math inline">\(X_{t1}\)</span> y <span class="math inline">\(X_{t2}\)</span> son variables aleatorias i.i.d. con distribucion marginal <span class="math inline">\(\text{Exp}(x|\theta)\)</span>, con <span class="math inline">\(\theta&gt;0\)</span>, se sigue <span class="math display">\[\begin{eqnarray}
+\mathbb{P}(S_t\leq s) 
+&amp; = &amp;
+\mathbb{P}(X_{t1}+X_{t2}\leq s)
+\nonumber \\
+&amp; = &amp;   
+F^{*(2)}_X(s)
+\nonumber \\
+&amp; = &amp;
+\text{Ga}(s|2,\theta).
+\label{eq_convolution_exponential}
+\end{eqnarray}\]</span></p>
+<hr />
+<p><strong>Caso</strong> <span class="math inline">\(N\)</span> <strong>general</strong></p>
+<p>En el caso donde <span class="math display">\[
+S_t=\sum_{i=1}^{J_t}X_{ti},
+\]</span> se sigue (por induccion), bajo los supuestos mencionados antes, que <span class="math display">\[\begin{eqnarray}
+\mathbb{P}(S_t\leq s) 
+&amp; = &amp;
+F_X^{*(J_t)}(s|\theta).
+\label{eq_convolution_general}
+\end{eqnarray}\]</span></p>
+<p><strong>NOTA 1:</strong> Solo en casos especificos de <span class="math inline">\(F_X(\cdot)\)</span> pertenecientes a distribuciones en la familia exponencial se pueden obtener expresiones analíticas cerradas para las convoluciones.</p>
+<p><strong>NOTA 2:</strong> En el caso general donde <span class="math inline">\(F_X(\cdot)\)</span> tenga uno o más átomos, la expresión analítica de la convolución es bastante compleja y, en muchos casos, imposible de obtener; aun cuando la parte absolutamente continua de <span class="math inline">\(F_X\)</span> pertenezca a la familia exponencial.</p>
+<p>De esta forma, se puede descansar en otros métodos descritos a continuación.</p>
+</div>
+<div id="b-metodo-de-momentos" class="section level2">
+<h2><span class="header-section-number">5.2</span> B) Método de momentos</h2>
+<p>El método de momentos se basa en la identificación de <span class="math inline">\(F_{S_t}(s)\)</span> a través de su correspondiente función generadora de momentos, <span class="math inline">\(M_{S_t}(w)\)</span> definida como <span class="math display">\[M_{S_t}(w)=\mathbb{E}_{F_{S_t}}\left(\exp\{wS_t\}\right).\]</span> La identificación es única pues la relación entre ambas funciones es <span class="math inline">\(1:1\)</span>.</p>
+<p>Bajo el supuesto de <em>independencia y homogeneidad en distribución</em> se sigue que <span class="math display">\[M_{S_t}(w)=\left[M_{X}(w)\right]^{J_t},\]</span> donde <span class="math inline">\(M_{X}(w)\)</span> es la función generadora de momentos genérica para las <span class="math inline">\(X_{tj}\)</span>s.</p>
+<hr />
+<p><strong>Ejercicio:</strong> ?`Cómo sería la expresión de <span class="math inline">\(M_{X}(w)\)</span> bajo el supuesto de intercambiabilidad en las <span class="math inline">\(X_{tj}\)</span>s?</p>
+<p>De esta forma, <strong>identificando</strong> la forma estructural de <span class="math inline">\(M_{X}(w)\)</span> puede identificarle la forma funcional asociada con <span class="math inline">\(F_{S_t}(s)\)</span>.</p>
+<hr />
+<p><strong>Supuestos</strong></p>
+<p>El procedimiento descansa en el supuesto que <span class="math inline">\(M_{X}(w)\)</span> existe y que ésta elevada a una cierta potencia tiene una forma analítica cerrada y conocida.</p>
+<p><strong>Nota:</strong></p>
+<p>El resultado se generaliza al uso de la <em>función característica</em>, <span class="math inline">\(\phi_{X}(w)\)</span>, y la <em>función generadora de probabilidades</em>, <span class="math inline">\(\rho_{X}(w)\)</span>.</p>
+<hr />
+<p>El reto analitico fundamental de este procedimiento reside en que <span class="math inline">\(F_{X}(x)\)</span> tiene típicamente al menos un punto de discontinuidad en <span class="math inline">\(\{0\}\)</span> (no reclamo por no siniestro), i.e. <span class="math display">\[
+F_{X}(x)=\theta \mathbb{I}_{\{0\}}(x) + (1-\theta)F_{X}^{c}(x),
+\]</span> donde <span class="math inline">\(F_{X}^{c}(x)\)</span> corresponde a la parte (absolutamente) continua de <span class="math inline">\(F_{X}(\cdot)\)</span>. En este caso, la función generadora de momentos asociada puede verse como la comosición de:</p>
+<ol style="list-style-type: lower-alpha">
+<li>Distribución continua para el reclamo, sujeto a un siniestro, i.e. <span class="math display">\[M_{X}^{c}(w)=\mathbb{E}_{F_{X}^{c}}\left(\exp\{w X\}\right),\]</span></li>
+<li>Distriución Bernoulli asociada con el eveneto de tener siniestro o no, i.e. <span class="math display">\[M_{\text{Siniestro}}(w)=\theta + (1-\theta)\exp\{w\}.\]</span></li>
+</ol>
+<hr />
+<p>Así, la expresión general para <span class="math inline">\(M_{X}(w)\)</span> es la siguiente, <span class="math display">\[
+M_{X}(w)=\theta + (1-\theta)\exp\{M_{X}^{c}(w)\}.
+\]</span> Esta expresión tendrá una forma anlítica anipulable en función de que <span class="math inline">\(M_{X}^{c}(w)\)</span> sea simple y compatible con <span class="math inline">\(\exp(\cdot)\)</span>.</p>
+<p>Empleando la expresión anterior, se sigue (bajo el supuesto de independencia y homogeneidad distribucional en las <span class="math inline">\(X_{tj}\)</span>), la función generadora de momentos para <span class="math inline">\(F_{S_t}(s)\)</span> está asociada con <span class="math display">\[M_{S_t}(w)=\left[\theta_t + (1-\theta_t)\exp\{M_{X_t}^{c}(w)\}\right]^{J_t}.\]</span></p>
+<hr />
+<p>Al rededor de esta expresión debemos anotar dos cosas:</p>
+<ol style="list-style-type: decimal">
+<li><p>La distribución para la ocurrencia de siniestros para un tiempo <span class="math inline">\(t\)</span> dado presupone homogeneidad entre las <span class="math inline">\(\{X_{tj}\}_{j=1}^{J_t}\)</span>. Sin embargo, podría hacerce alusión a homogeneidad distribucional a través de <span class="math inline">\(t\)</span>.</p></li>
+<li><p>El comentario anterior aplica análogamente a <span class="math inline">\(F_{X_t}^{c}(x)\)</span>.</p></li>
+</ol>
+<p>Como podrán anticipar, sólo pocos casos particulares será posible identificar <span class="math inline">\(F_{S_t}(s)\)</span> a través de <span class="math inline">\(M_{S_{t}}(w)\)</span>.</p>
+<hr />
+</div>
+<div id="c-metodo-basado-en-simulacion-estocastica" class="section level2">
+<h2><span class="header-section-number">5.3</span> C) Método basado en simulación estocástica</h2>
+<p>Un método alternativo de calculo/aproximación de <span class="math inline">\(F_{S_t}(s)\)</span> consiste en generar muestras (pseudo) aleatorias de <span class="math inline">\(\{X_{tj}\}_{j=1}^{J_t}\)</span>, agregándolas en cada caso descansando en el método de Monte Carlo. Así, el algoritmo se resume en los siguientes pasos:</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>Fijar <span class="math inline">\(K\)</span> número de simulaciones deseadas de <span class="math inline">\(F_{S_t}(s)\)</span> (entre mayor sera <span class="math inline">\(K\)</span> la aproximación será más precisa, pero menos eficiente computacionalente).</p></li>
+<li><p>Para <span class="math inline">\(k=1, \ldots, K\)</span> generar <span class="math inline">\(J_t\)</span> variables pseudo aleatorias de <span class="math inline">\(F_{X_t}(x)\)</span>, denottadas por <span class="math display">\[\left\{x^{(k)}_{tj}\right\}_{j=1}^{J_t}\]</span>.</p></li>
+<li><p>Para cada <span class="math inline">\(k\)</span>, generar la muestra de <span class="math inline">\(F_{S_t}(s)\)</span> correspondiente mediante la agregación de las <span class="math inline">\(x_{tj}^{(k)}\)</span>s correspondientes, i.e. <span class="math display">\[s_{t}^{(k)}=\sum_{j=1}^{J_t}x^{(k)}_{tj}.\]</span></p></li>
+<li><p>la colección de datos simulados <span class="math inline">\(\{s_{t}^{(k)}\}_{k=1}^{K}\)</span> corresponde a una muestra aleatoria de <span class="math inline">\(F_{S_t}(s)\)</span>.</p></li>
+</ol>
+<p>Usando los recursos computacionales actuales, el método de simulación estocástica resulta ser bastante versátil y útil en la práctica.</p>
+</div>
+<div id="d-aproximacion-analitica" class="section level2">
+<h2><span class="header-section-number">5.4</span> D) Aproximacion analitica</h2>
+<p>La aproximacion analitica para <span class="math inline">\(F_{S-t}(s)\)</span> descansa en el Teorema Central de Limite (TCL), argumentando que la composicion del portafolio, <span class="math inline">\(J_t\)</span>, es relativamente <code>grande</code>.</p>
+<p>Dado que en teoria se conoce la media y varianza de <span class="math inline">\(S_t\)</span>, <code>suponiendo</code> que <span class="math inline">\(\mathbb{E}(X)\)</span> y <span class="math inline">\(var(X)\)</span> son <code>fijos</code> y <code>conocidos</code>, se sigue <span class="math display">\[\begin{eqnarray}
+F_{S_t}(s)
+ &amp; = &amp;
+ \mathbb{P}\left(S_t \leq s\right)
+ \nonumber \\
+ &amp; = &amp;
+ \mathbb{P}\left(\frac{S_t-\mathbb{E}(S)}{sd(S_t)}\leq \frac{s-\mathbb{E}(S_t)}{sd(S_t)}\right)
+ \nonumber \\
+ &amp; \approx &amp;
+ \mathbb{P}\left( Z \leq \frac{s-\mathbb{E}(S_t)}{sd(S_t)}\right)
+ \nonumber \\
+ &amp; \approx &amp;
+ N\left( S_t | \mathbb{E}(S_t), var(S_t)\right),
+ \nonumber
+\end{eqnarray}\]</span> donde <span class="math inline">\(sd(S) = var(S)^{1/2}\)</span> y <span class="math inline">\(Z \sim N(z|0,1)\)</span>.</p>
+<hr />
+<p><strong>Comentarios</strong></p>
 <ul>
-<li><p>Klugman et al (2004) <em>Loss Model: From Data to Decisions</em>, Seccion 4.7.</p></li>
-<li><p>Panjer (2006) <em>Operational Risk Modeling Analytics</em>, Capitulo 5.</p></li>
+<li><p>El resultado asintotico anterior es valido solo en el caso que <span class="math inline">\(var(X)&lt;\infty,\)</span> (o equivalentemente, sujeto a <span class="math inline">\(\mathbb{E}\left(X^{2}\right)\)</span> sea finito).</p></li>
+<li><p>Esta condicion se cumple solo en el caso en el que las severidades individuales son de <em>riesgo moderado</em>, i.e. no existe una prevalencia de riesgos indidividuales grandes. Desde un punto de vista probabilisticos, se sigue cuando el segundo momento del reclamo individual no se aplica cuando el monto del reclamo tenga colas pesada (i.e. exhiba valores extremos).</p></li>
+</ul>
+<hr />
+<div id="aproximacion-analitica-modificada-por-sesgo" class="section level3">
+<h3><span class="header-section-number">5.4.1</span> Aproximacion analitica modificada por sesgo</h3>
+<p>Previniendo que el monto agregado de siniestros, <span class="math inline">\(S_t\)</span>, pueda exhibir sesgos en su distribucion, debido principalmente a que tiene soporte en la recta real positiva, pero tambien a sesgos en:</p>
+<ul>
+<li><p>la distribucion de los reclamos individuales</p></li>
+<li><p>distribucion del numero de reclamos a traves de <span class="math inline">\(\theta\)</span>,</p></li>
+</ul>
+<p>se ha desarrollado una approximacion analitica alternativa a la normal. Esta aproximacion descansa en la distribucion <strong>gamma trasladada</strong> con tres parametros, dada por</p>
+<p><span class="math display">\[\begin{eqnarray}
+F_{S_t}(s) 
+  &amp; \approx &amp;
+  Ga\left(s-s_{t0}|\alpha_{t},\beta_{t}\right),
+\end{eqnarray}\]</span> donde</p>
+<ul>
+<li><p><span class="math inline">\(s_{j0}\)</span> es un parametro de traslacion,</p></li>
+<li><p><span class="math inline">\(\alpha_t\)</span> es un parametro de forma,</p></li>
+<li><p><span class="math inline">\(\beta_t\)</span> es un parametro de escala.</p></li>
+</ul>
+<hr />
+<p>El kernel de la distribucion gamma en cuestion es de la forma <span class="math display">\[
+Ga\left(x|\alpha,\beta\right)
+  \propto
+  x^{\alpha-1} \exp\{-\beta x\}\mathbb{I}_{[0,\infty)}(x).
+\]</span></p>
+<hr />
+</div>
+<div id="calibracion-por-el-metodo-de-momentos" class="section level3">
+<h3><span class="header-section-number">5.4.2</span> Calibracion por el metodo de momentos</h3>
+<p>En la practica, los parametros <span class="math inline">\(\alpha\)</span>, <span class="math inline">\(\beta\)</span> y <span class="math inline">\(s_{0}\)</span> se <em>obtienen/calibran</em> a traves del <strong>metodo de momentos (MM)</strong>,</p>
+<blockquote>
+<p>El MM consiste en elegir los <code>parametros de la distribucion</code> de tal forma que los <code>tres primeros momentos teoricos</code> (en este caso) de la distribucion son iguales iguales a los <code>tres primeros momentos muestrales</code> de los datos, i.e.</p>
+</blockquote>
+<p><span class="math display">\[\begin{eqnarray}
+\mathbb{E}(S_t)
+  &amp; = &amp;
+  s_{t0} + \alpha_{t}/\beta_{t}
+  \nonumber \\
+var(S_{t})
+  &amp; = &amp;
+  \alpha_{t}/\beta_{t}^{2}
+  \nonumber \\
+sesgo(S_{t})
+  &amp; = &amp;
+  2/\alpha_{t}^{1/2}.
+  \nonumber
+\end{eqnarray}\]</span></p>
+<hr />
+<p>Resolviendo las tres ecuaiones anteriores para los tres parametros en cuestion se obtiene, <span class="math display">\[\begin{eqnarray}
+\alpha_{t}
+  &amp; = &amp;
+  4/sesgo(S_t)^{2}
+  \nonumber \\
+\beta_{t}
+  &amp; = &amp;
+  2/sesgo(S_{t})sd(S_{t})
+  \nonumber \\
+s_{t0}
+  &amp; = &amp;
+  \mathbb{E}(S_{t}) -2sd(S_{t})/sesgo(S_{t}).
+  \nonumber
+\end{eqnarray}\]</span></p>
+<hr />
+<p><strong>Supuesto</strong></p>
+<p>Esta aproximacion es valida solo en el caso en que <span class="math inline">\(sesgo(S_t)&gt;0\)</span>. En el caso limite cuando <span class="math inline">\(sesgo(S_t)\)</span> decrezca a <span class="math inline">\(0\)</span> se tiene que la aproximacion gamma trasladada converge a la aproximacion normal inducida por el Teorema Central de Limite. <strong>Este es un ejercicio de TAREA a entregarse.</strong></p>
+<hr />
+</div>
+<div id="aproximacion-analitica-con-variante-adicional-por-sesgo" class="section level3">
+<h3><span class="header-section-number">5.4.3</span> Aproximacion analitica con variante adicional por sesgo</h3>
+<p>Consideramos una aproximacion adicional a <span class="math inline">\(F_S(s)\)</span> basada en el ajuste a los primeros tres momentos de su distribucion, como la aproximacion anterior. La nueva aproximacion hace referencia a la distribucion <code>normal potencia</code>.</p>
+<p><strong>Supuesto</strong></p>
+<p>Al igual que el caso anterior, partimos del supuesto <span class="math inline">\(\mathbb{E}(S_t)\)</span>, <span class="math inline">\(var(S_t)\)</span> y <span class="math inline">\(sesgo(S_t)\)</span> son conocidos (con <span class="math inline">\(sesgo(S_t)&gt;0\)</span>). Se tiene que para todo <span class="math inline">\(s\geq 1\)</span> en el soporte <span class="math inline">\(\mathcal{S}\)</span> de <span class="math inline">\(S\)</span>, <span class="math display">\[\begin{eqnarray}
+\mathbb{P}\left( \frac{S_t-\mathbb{E}(S_t)}{sd(S_t)} \leq s+\frac{sesgo(S_t)}{6}(s^2-1)\right)
+  &amp; \approx &amp;
+  N(s|0,1).
+  \nonumber
+\end{eqnarray}\]</span></p>
+<hr />
+<p>Es decir, <span class="math display">\[\begin{eqnarray}
+\mathbb{P}\left( \frac{S_t-\mathbb{E}(S_t)}{sd(S_t)} \leq x \right)
+  &amp; \approx &amp;
+  N\left( \left( \frac{9}{sesgo(S_t)^2} + \frac{6x}{sesgo(S_t)} + 1\right)^{1/2} 
+  - \frac{3}{sesgo(S)}|0,1\right),
+  \nonumber
+\end{eqnarray}\]</span> para <span class="math inline">\(s \geq 1\)</span>.</p>
+<ul>
+<li>En casos donde <span class="math inline">\(s &lt; 1\)</span>, la aproximacion inducida por el teorema Central de Limite debera ser utilizada.</li>
+</ul>
+<hr />
+<p><strong>Implementacion practica</strong></p>
+<ul>
+<li><strong>En la practica</strong>, cuando se desee aproximar <span class="math inline">\(F_S(s)\)</span> empleando aproximaciones analiticas, debemos reemplazar <span class="math inline">\(\mathbb{E}(S_t)\)</span>, <span class="math inline">\(var(S_t)\)</span> y <span class="math inline">\(sesgo(S_t)\)</span> por sus correspondientes estimadores muestrales.</li>
+</ul>
+<hr />
+</div>
+</div>
+<div id="e-aproximacion-por-recursion" class="section level2">
+<h2><span class="header-section-number">5.5</span> E) Aproximacion por recursion</h2>
+<p>La recursion que consideraremos ahora descansa en el caso donde <span class="math inline">\(F_X(x)\)</span>, la distribucion del monto individual de reclamo, es discretizada considerando <span class="math inline">\(I\)</span> clases/rangos de reclamos, i.e. <span class="math display">\[\begin{eqnarray}
+  F_X \approx \sum_{i=1}^{I} q_i \delta_{\{x^{*}_i\}},
+\end{eqnarray}\]</span> donde <span class="math inline">\(\{x^{*}_i\}_{i=1}^{I}\)</span> representan los montos ranqueados de reclamos individuales, y <span class="math inline">\(\{q_i\}_{i=1}^{I}\)</span> las probabilidades de clases correspondientes.</p>
+<hr />
+<p><strong>Supuesto</strong></p>
+<p>Es deseble suponer que las clases o los rangos de los montos de reclamos individuales son <em>equidistantes</em>.</p>
+<p>Así, la distribucion del total de polizas en el portafolio puede agruparse entonces en una <code>tabla de contingencia</code> <span class="math display">\[
+(N_{ti})_{i=1}^{I},
+\]</span> donde <span class="math display">\[N_{ti}\]</span> denota el numero de polizas que tuvieron el monto de reclamo <span class="math inline">\(x^{*}_{i}\)</span>, con la restriccion <span class="math display">\[J_t=\sum_{i=1}^{I}N_{ti}.\]</span></p>
+<hr />
+<p>La tabla de contingencia viene acompaniada con las probabilidades de realizacion de los reclamos individuales, <span class="math display">\[\boldsymbol{\theta}=(\theta_1,\ldots,\theta_I),\]</span> los cuales estan sujetos a</p>
+<ul>
+<li><p><span class="math inline">\(\theta_{i}\geq 0\)</span> para todo <span class="math inline">\(i=a,\ldots,I\)</span></p></li>
+<li><p><span class="math inline">\(\sum_{i=1}^{I}\theta_i=1.\)</span></p></li>
+</ul>
+<p>De esta forma, el monto agregado de siniestros estaria expresado como, <span class="math display">\[
+S_t=\sum_{i=1}^{I} N_{tij} x^{*}_{i},
+\]</span> considerando que <span class="math inline">\(\sum_{i=1}^{I}q_i=1\)</span>, con <span class="math inline">\(x^{*}_{1}=0\)</span> y <span class="math inline">\(x^{*}_{i}&gt;0\)</span> para todo <span class="math inline">\(i\geq 2\)</span>.</p>
+<hr />
+<div id="recursion-de-de-pril" class="section level3">
+<h3><span class="header-section-number">5.5.1</span> Recursion de De Pril</h3>
+<p>La recursion de De Pril hace referencia a un portafolio de seguros en el que</p>
+<ul>
+<li><p>los montos de siniestros individuales estan ranqueados en una escala equidistnate, considerando un nivel base <span class="math inline">\(M\)</span>, i.e. <span class="math inline">\(x^{*}_{i}=M\times i\)</span>, para <span class="math inline">\(i=1,\ldots, I\)</span>, siento <span class="math inline">\(MI\)</span> el monto maximo de cobsertura.</p></li>
+<li><p>adicionalmente, cada poliza esta expuesta <span class="math inline">\(D\)</span> riesgos distintos, con correspondientes porbabulidades de siniestos <span class="math inline">\(\theta_1,\theta_2,\ldots,\theta_D\)</span>. (El modelo oroginal considera una sola clasificacion / exposicion a riesgos).</p></li>
+</ul>
+<hr />
+<p>De esta forma, se define una nueva tabla de contingencia <span class="math display">\[(N_{id})_{i=1,d=1}^{I,D},\]</span> en la que <span class="math inline">\(N_{id}\)</span> denota el numero polizas con el beneficio <span class="math inline">\(i\)</span> y la probabuilidad de reclamo <span class="math inline">\(\theta_j\)</span>.</p>
+<p>La formula para calcular la distribucion del monto agregado <span class="math inline">\(S_t\)</span> se obtiene como <span class="math display">\[
+\mathbb{P}\left(S_t=y\right)=\frac{1}{y}\sum_{i=1}
+^{min\{y,M\}}\sum_{d=1}^{y/d}p(y-id)h(i,d),\]</span> con <span class="math display">\[p(0)=\prod_{i=1}^{I}\prod_{d=1}^{D}(1-\theta_d)^{n_{id}},\]</span> y <span class="math display">\[h(i,k)=i(-1)^{k-1}\sum_{d=1}^{D}n_{id}\left(\frac{\theta_d}{1-\theta_d}\right)^{k}.\]</span></p>
+<hr />
+<p><strong>Recursion</strong></p>
+<p>La formula anterior tiene una forma simple de calcularse a traves de la siguiente recursion, <span class="math display">\[
+p_{K}(0)=p(0),
+\]</span> y <span class="math display">\[
+p_{K}(y)=\frac{1}{y}\sum_{i=1}^{min\{y,M\}} \sum_{k=1}^{min\{K,y/i\}}p_{K}(y-ik)h(i,k),
+\]</span> considerando a <span class="math inline">\(K\)</span> como un parametro adicional. Usualente <span class="math inline">\(K:=4\)</span> es una consideracion viable, pero recordemos que <span class="math inline">\(K\)</span> puede ser cualqueir entero poitivo.</p>
+<hr />
+</div>
+</div>
+</div>
+<div id="temas-siguientes" class="section level1">
+<h1><span class="header-section-number">6</span> Temas siguientes</h1>
+<ul>
+<li><p>Metodo de momentos para aproximar <span class="math inline">\(F_{S}(s)\)</span></p></li>
+<li><p>Recursiones en le modelo de riesgo colectivo (Recursion de De Pril y Panjer)</p></li>
 </ul>
 </div>
 

@@ -1,5 +1,5 @@
 ---
-title: "Sesion 04 - Modificacion de Distribuciones y Agregacion de Riesgos"
+title: "Sesion 04 a - Modificacion de Distribuciones (Frecuencia de Siniestros)"
 author:
 -  Juan Carlos Martínez-Ovando
 date: "Otoño 2019"
@@ -55,19 +55,7 @@ header-includes:
 
 # Objetivos
 
-Esta sesion esta dividida en dos partes:
-
-`Parte 1` - Enfoques de agregacion de riesgos
-
-`Parte 2` - Preliminares del aprendizaje estadistico en la agregacion de riesgos
-
-Los temas claves de estas partes son:
-
-* Estudiar las implicaciones de la `propiedad de separacion` en el proceso inferencia en distribuciones tipo mixtas.
-
-* Incorporar `datos` en el proceso de aprendizaje.
-
-* Incorporar `datos` e `informacion complementaria` en el proceso aprendizaje.
+Estudiar el concepto de modificacion de distribuciones, particularmente aplicado a los modelos para la frecuencia de siniestros.
 
 ---
 
