@@ -1,5 +1,5 @@
 ---
-title: "Sesion 04 - Enfoque de Riesgo Colectivo"
+title: "Sesion 03 - Enfoque de Riesgo Agregado"
 author:
 -  Juan Carlos Martínez-Ovando
 date: "Otoño 2019"
@@ -53,358 +53,98 @@ header-includes:
 
 # Objetivos
 
-`Parte 1`
 
-* Estudiaremos algunas conexiones entre las distribuciones de frecuencias de siniestros.
+# Agregacion de riesgos
 
-* Estudiaremos aspectos de temporalidad en la especificacion de estas distribuciones.
+## Notacion
 
-`Parte 2`
-
-* Estudiaremos la nocion de modificacion de distribuciones
-
-* Revisaremos aspectos inferenciales asociados con esta modificaciones
-
-
-# Preambulo
-
-En esta seccion consideramos que estamos trabajando con la especificacion del riesgo agregado, $S_t$, bajo el **enfoque de riesgo colectivo**, es decir
-$$
-S_t = \sum_{j=1}^{N_t} Y_{tj},
-$$
-donde 
-
-* $Y_{tj}$ denota el $j$-esimo monto de siniestro (ocurrido) en el periodo $t$ condicional en $\iota_{tj}=1$ (i.e. $Y_{tj}>0$).
-
-## Un caso particular
-
-Recordemos que bajo el supuesto que cada poliza pueda siniestrarse solo una vez en el periodo, la frecuencia de siniestros $N_t$ puede expresarse como,
-$$
-N_t=\sum_{i=1}^{J_t}\iota_{ti},
-$$
-donde ahora $i$-denota el indice de las polizas suscritas en el periodo $t$, siendo $J_t$ la suscripcion total del portafolio de seguros en $t$.
-
-En esta sesion prestaremos atencion a algunos modelos de probabilidad empleados para describir la incertidumbre entorno a $N_t$. 
-
-*Posteriormente analizaremos la modelacion de las severidades/monto de siniestros individuales.*
-
-# Frecuencia de Siniestros
-
-Los modelos usualmente asociados con $N_t$ son del tipo parametrico.
-
-## Distribucion binomial
-
-Se dice que $N$ sigue una distribucion binomial, $Bin(n|J,\theta)$, cuando
-\begin{eqnarray}
-  \mathbb{E}(N) & = & J\theta
-  \nonumber \\
-  var(N) & = & J\theta(1-\theta)
-  \nonumber \\
-  M_{N}(t) & = & \left(\theta e^{t}+1-\theta\right)^{J}
-  \nonumber \\
-  P_{N}(t) & = & \left(\theta t+1-\theta\right)^{J}.
-  \nonumber
-\end{eqnarray}
-
-El parametro $0<\theta<1$ se interpreta como $\mathbb{P}(\text{siniestro})$ para cualquier poliza dentro del portafolio de seguros, referente al periodo de operacion.
-
-La distribucion binomial se usa en el contexto donde cada poliza en el portafiolio puede producir solo un reclamo dentro del periodo de operacion. 
-
-**Presupone que cada poliza puede siniestrase a lo mas solo una vez en el periodo de operaciones.**
-
-### Calculo y visualizacion
-
-
-```{r binomial_plot, include=TRUE}
-Binomial.Plot <-function(n, p, low=0, high=n,scale = F, a=NA,b=NA,calcProb=!all(is.na(c(a,b))),quantile=NA,calcQuant=!is.na(quantile)){
-  # Binomial
-  sd = sqrt(n * p * (1 - p))
-  if(scale && (n > 10)) {
-    low = max(0, round(n * p - 4 * sd))
-    high = min(n, round(n * p + 4 * sd))
-  }
-  values = low:high
-  probs = dbinom(values, n, p)
-  plot(c(low,high), c(0,max(probs)), type = "n", 
-       xlab = "Numero de casos",
-       ylab = "Masa de probabilidad",
-       main = "")
-  lines(values, probs, type = "h", col = 2)
-  abline(h=0,col=3)
-  if(calcProb) {
-    if(is.na(a))
-      a = 0
-    if(is.na(b))
-      b = n
-    if(a > b) {
-      d = a
-      a = b
-      b = d
-    }
-    a = round(a)
-    b = round(b)
-    prob = pbinom(b,n,p) - pbinom(a-1,n,p)
-    title(paste("P(",a," <= N <= ",b,") = ",round(prob,6),sep=""),line=0,col.main=4)
-    u = seq(max(c(a,low)),min(c(b,high)),by=1)
-    v = dbinom(u,n,p)
-    lines(u,v,type="h",col=4)
-  }
-  else if(calcQuant==T) {
-    if(quantile < 0 || quantile > 1)
-      stop("El cuantil debe estar entre 0 y 1")
-    x = qbinom(quantile,n,p)
-    title(paste(" ",quantile," quantile = ",x,sep=""),line=0,col.main=4)
-    u = 0:x
-    v = dbinom(u,n,p)
-    lines(u,v,type="h",col=4)
-  }
-  return(invisible())
-}
-```
-
-```{r}
-Binomial.Plot(100,.3)
-```
-
-```{r}
-Binomial.Plot(100,0.3,a=27,b=33,scale=T)
-```
-
-Revisen la funcion `Binomial.Plot()` en el archivo `markdown` de esta presentacion.
-
-## Distribucion Poisson
-
-La distribucion Poisson es quizas la distribucion de frecuencias de siniestros mas empleada en la practica y en la teoria.
-
-Se dice que $N$ se distribuye Poisson, $Po(n|\lambda)$ cuando,
-\begin{eqnarray}
-  \mathbb{E}(N) & = & \lambda
-  \nonumber \\
-  var(N) & = & \lambda
-  \nonumber \\
-  M_{N}(t) & = & \exp\left\{\lambda\left(e^{t}-1\right)\right\}
-  \nonumber \\
-  P_{N}(t) & = & \exp\left\{\lambda\left(t-1\right)\right\},
-  \nonumber
-\end{eqnarray}
-donde $\lambda$ es la tasa de intensidad de siniestros referente al periodo de operacion.
-
-Al igual que la distribucion binomial negativa, esta distribucion se emplea en el caso donde cada poliza dentro del portafolio de seguros puede producir mas de un siniestro en el periodo de operacion.
-
-**Esta dsitribucion presupone que cada poliza puede siniestrarse mas de una vez en el periodo de operaciones.**
-
-### Calculo y visualizacion
-
-Revisen la funcion `Poisson.Plot()` en el `markdown` de esta presentacion.
-
-```{r poisson_plot, include=TRUE}
-Poisson.Plot <- function(mu, a=NA,b=NA,calcProb=(!is.na(a) | !is.na(b)),quantile=NA,calcQuant=!is.na(quantile)){
-  # Poisson
-  sd = sqrt(mu)
-  low = max(0, round(mu - 3 * sd))
-  high = round(mu + 5 * sd)
-  values = low:high
-  probs = dpois(values, mu)
-  plot(c(low,high), c(0,max(probs)), type = "n", 
-       xlab = "Numero de casos",
-       ylab = "Masas de probabilidad",
-       main = "")
-  lines(values, probs, type = "h", col = 2)
-  abline(h=0,col=3)
-  if(calcProb) {
-    if(is.na(a)){ a = 0 }
-    if(is.na(b)){
-      a = round(a)
-      prob = 1-ppois(a-1,mu)
-      title(paste("P(",a," <= Y ) = ",round(prob,6),sep=""),line=0,col.main=4)
-      u = seq(max(c(a,low)),high,by=1)
-    }
-    else {
-      if(a > b) {d = a; a = b; b = d;}
-      a = round(a); b = round(b)
-      prob = ppois(b,mu) - ppois(a-1,mu)
-      title(paste("P(",a," <= N <= ",b,") = ",round(prob,6),sep=""),line=0,col.main=4)
-      u = seq(max(c(a,low)),min(c(b,high)),by=1)
-    }
-    v = dpois(u,mu)
-    lines(u,v,type="h",col=4)
-  }
-  else if(calcQuant==T) {
-    if(quantile < 0 || quantile > 1)
-      stop("El cuantil debe estar entre 0 y 1")
-    x = qpois(quantile,mu)
-    title(paste("",quantile," quantile = ",x,sep=""),line=0,col.main=4)
-    u = 0:x
-    v = dpois(u,mu)
-    lines(u,v,type="h",col=4)
-  }
-  return(invisible())
-}
-```
-
-## Distribucion binomial-negativa
-
-Se dice que $N$ tiene una distribucion binomial negativa, $BinNeg(n|r,\theta)$ si
-\begin{eqnarray}
-  \mathbb{E}(N) & = & \frac{r(1-\theta)}{\theta}
-  \nonumber \\
-  var(N) & = & \frac{r(1-\theta)}{\theta^{2}}
-  \nonumber \\
-  M_{N}(t) & = & \left(\frac{\theta}{1-(1-\theta)e^{t}}\right)^{r}
-  \nonumber \\
-  P_{N}(t) & = & \left(\frac{\theta}{1-(1-\theta)t}\right)^{r},
-  \nonumber
-\end{eqnarray}
-para $r$ entero positivo y $0<\theta<1$.
-
-Esta distribucion se emplea en el caso de portafolios en los que cada polia puede producir mas de un reclamo dentro del periodo de operacion.
-
-**Esta dsitribucion presupone que cada poliza puede siniestrarse mas de una vez en el periodo de operaciones.**
-
-### Calculo y visualizacion
-
-Modifiquen la funcion `Poisson.Plot()` para crear la funcion `BinNeg.Plot()` para generar los resultados analogos de `Poisson.Plot()` y `Binomial.Plot()` incluidas en el `markdown` de esta presentacion.
-
-
-## Clase (a,b,0)
-
-Las distribuciones `binomial`, `Poisson` y `binomial negativa` pueden expresarse como una clase de distribuciones mas general, con *decrementos exponenciales o tasas de cambio lineal* en las $(p_n)_{n\in\mathcal{N}}$. Esta clase es conocida como la **clase** $(a,b,0)$.
+Son modelos estacasticos que miden la incertidumbre asociada con un portafolio de seguros.
 	  	
-Las masas de probabilidades, $\Pr(N=n)=p_n$, en esta clase se definien de **manera recursiva**, como 
-$$
-\frac{p_n}{p_{n-1}} = a + \frac{b}{n},
-$$
-para $n=1,2,3,\ldots$.
- 		
-El valor 
-$$
-p_0 := \Pr(N=0)
-$$
-se define como un parametro adicional inicial.
- 	
-### Soporte
+Para esto, se distinguen las siguientes caracteristicas:
 
-El **soporte** de las distribuciones $(\alpha,\beta)$, para $\mathcal{N}$, es tipicamente un subconjunto de los enteros positivos, i.e. 
-$$
-\mathcal{N} 
-\subseteq
-\mathbb{N}_0=\{0\}\cup \{1,2,3,\ldots\}.
-$$
+* $J$ es la suscripcion de un portafolio de seguros en un periodo de tiempo dado
+
+* $Y_j$ es la variable aleatoria que mide el monto de siniestro de una poliza ($j=1,\ldots,J$)
+
+* $X_j$ es el monto de reclamo del siniestro en la poliza $j$
+
+* $D_j$ es el monto del siniestro a cargo del asegurado
+
+* $Z_j$ es el monto del siniestro a cargo de la reaseguradora
+
+
+## Agregacion
+
+As\'i, para cada p\'oliza $j=1,\ldots,J$,
+\begin{equation}
+  Y_j = D_j + X_j + Z_j.
+\end{equation}
 		
-Sin embargo, puede definirse tambien sobre **latices**, que son soportes 
-$$
-\mathcal{K}=\{kn:n\in\mathcal{N}\},
-$$
-para algun escalar $k$
+Mientras que,
 
-Este se usa para definir **distribuciones de probabilidad sobre rangos** de variables --que es de utilidad para severidades individuales ranqueadas--.
+* $\sum_{j=1}^{J} Y_j$ es la severidad acumulada de siniestros
 
-### Usos
+* $\sum_{j=1}^{J} X_j$ es la severidad acumulada de siniestros a cargo de la aseguradora
 
-El uso de las distribuciones $(\alpha,\beta,0)$ se relaciona principalmente con las formulas de recursion (especificamente la recursion de Panjer) para calcular la distribucion de $S$, **monto agregado de distribuciones** (lo estudiaremos mas adelante).
+## Racionalidad
 
-### Relaciones
+No todas las p\'olizas experimentaron un siniestro (principio del seguro). As\'i,
 
+a.  En caso de siniestro, $Y_j > 0$
 
-Los valores especificos de $(\alpha,\beta)$ y $p_0$ asociados con las distribuciones parametricas convencionales estan dados en la siguiente tabla.
+b. En caso de no siniestro, $Y_j = 0$.
 
+De esta forma,
 
-| Distribucion | $p_0$    | $\alpha$  | $\beta$  |
-|--------------|:--------:|:---------:|:--------:|
-| $\text{Po}(\cdot|\lambda)$        | $e^{-\lambda}$    | $0$ | $\lambda$ |
-| $\text{BinNeg}(\cdot|r,\theta)$   | $(1+\theta)^{-r}$ | $\frac{\theta}{1+\theta}$ | $r\left(\frac{\theta}{1+\theta}\right)$ |
-| $\text{Bin}(\cdot|J,\theta)$      | $(1-\theta)^{J}$  | $-\frac{\theta}{1-\theta}$ | $(J+1)\left(\frac{\theta}{1-\theta}\right)$ |
+\begin{eqnarray}
+	\sum_{j=1}^{J} Y_j
+	& = & 
+	\sum_{j|Y_j=0} Y_j
+	+
+	\sum_{j|Y_j>0} Y_j
+	\nonumber \\
+	& = & 
+	\sum_{j} Y_j \Indic(Y_j=0)
+	+
+	\sum_{j} Y_j \Indic(Y_j>0)
+	\nonumber \\
+	& = & 
+  \sum_{j}^{N} Y_j \Indic(Y_j>0),
+\end{eqnarray}
+donde,
 
+* $N$ es el n\'umero de siniestros en el periodo dado (a.k.a. frecuencia de siniestros).
 
-El caso de la distribucion $\text{Geo}(\cdot|\theta)$ se deriva directamente del caso correspodiente en la tabla anterior.	
+## Consideraciones
 
-### Parametrizacion
+* Intr\'insecamente, $N$ (antes de observarse) es incierto y aleatorio
 
+* La magnitud individual del siniestro, $Y_j \Indic(Y_j>0)$ (antes de observarse) es incierta y aleatoria, as\'i como la ocurrencia de siniestro, $\Indic(Y_j>0)$.
 
-![Caption for the picture.](./Figuras/act11302_clase_ab0.png)
+Para, 
+\begin{eqnarray}
+S 	& = & 
+\sum_{j}^{N} Y_j \Indic(Y_j>0),
+\end{eqnarray}
+las fuentes de aleatoriedad son:
 
-### Calculo y visualizacion
+* $N$ - frecuencia de siniestros
 
-Vean la funcion `aboclass()` en `R`.
+* $S_j$ - severidad individual de siniestros
 
-```{r ab0_pmf, echo=TRUE}
-ab0class <- function(alpha, beta, pO, K){
-  ab0dist <- array(NA, dim=c(K+1,3))
-  ab0dist[,1] <- seq(0:K)-1
-  ab0dist[1,2] <- p0
-  k <- 1
-  for(k in 1:K){
-    ab0dist[(k+1),2] <- as.numeric(ab0dist[k,2] %*% (alpha + beta/k)) 
-    }
-  ab0dist[,3] <- cumsum(ab0dist[,2])
-  return(ab0dist)
-  }
-```
+# Enfoque de riesgo individual
 
-### Comparativo
+El monto agregado de siniestro, $S$, se define por
 
+* El numero de sumandos (suscripcion total), $J$, considerado como fijo en riesgo operacional (mas no en riesgo de mercado),
 
-```{r ab0_plot_comparacion, echo=FALSE}
-if(!require("ggplot2")){install.packages("ggplot2")}
-suppressMessages(library("ggplot2"))
-ggplot(data.frame(x=c(0:20)), aes(x)) +
-    geom_point(aes(y=dpois(x, 10)), colour="red", 
-               ylab = "masa de probabildad", xlab="N") +
-    geom_point(aes(y=dbinom(x, 100, 0.1)), colour="blue") +
-    geom_point(aes(y=dnbinom(x, 90, 0.9)), colour="green")
-```
+* Severidad individual, $Y_j \in \{0\}\cup (0,\infty)$, desconocida y aleatorio, para todo $j=1,\ldots,J$.
 
-### Comentarios
+## Enfoque de riesgo colectivo
 
-* En `azul` marcamos las masas de probabilidad de la `distribucion binomial`
+El monto agregado de siniestro, $S$, se define por
 
-* En `verde` marcamos las masas de probabilidad de la `distribucion binomial-negativa`
+* N\'umero de sumandos (frecuencia aleatoria), $N$, desconocido
 
-* En `rojo` marcamos las masas de probabilidad de la `distribucion Poisson`
+* Severidad individual, $Y_j \in (0,\infty)$, considerada como desconocida y aleatoria, para todo $j=1,\ldots,J$.
 
-Asi, vemos que la distribucion `binomial negativa` es la *mas dispersa*, la `binomial` la *menos dispersa*. La distribucion `Poisson` esta entre ambas.
-
-### Ejemplo: Poisson
-
-
-```{r abo_plot_poisson, echo=TRUE}
-K <- 100
-alpha <- 0
-beta <- 30
-p0 <- exp(-beta)
-ab0dist <- ab0class(alpha, beta, pO, K)
-
-plot(ab0dist[,1],ab0dist[,2],type="h", ylab="P(N=n)", col=2, xlab="n", main="");abline(h=0:1,col=3)
-points(ab0dist[,1],ab0dist[,2],col=2);abline(h=0,col=3)
-```
-
-
-# Propiedades
-
-## Agregacion de variables aleatorias Poisson
-
-Supongamos que $N_1,\ldots,N_M$ son variables aleatorias independientes con distribucion Poisson, $\text{Po}(N_m=n_m|\lambda_m)$, respectivamente, con $\lambda_m$s posiblemente diferentes. Se sigue,  
-
-* $N = \sum_{m=1}^{M}N_m$ se distribuye Poisson
-
-* $N$ tiene tasa de intensidad $\lambda=\sum_{m=1}^{M}\lambda_m$.
-
-> Este es un **teorema importante** relacionado con el tema de diversificacion y agregacion de riesgos.
-
-## Desagregacion de variables aleatorias Poisson
-
-Supongamos que $N \sim \text{Po}(n|\lambda)$, con $\lambda > 0$, y consideremos que los eventos pueden clasificarse en $K$ tipos distintos independientes (pero **no conocidos**), con probabilidades $w_1,\ldots,w_K$. Entonces, condicional en $N=n$, se sigue,
-
-* las frecuencias de siniestros dentro de cada clase, $N_k$s, son mutuamente independientes, para $k=1,\ldots,K$
-  
-* cada $N_k$ tiene distribucion $\text{Po}(n|\lambda_k)$, con $\lambda_k=w_k\lambda$.
-
-# Ejercicio
-
-1. Modifiquen la funcion `Poisson.Plot()` para crear la funcion `BinNeg.Plot()` para generar los resultados analogos de `Poisson.Plot()` y `Binomial.Plot()` incluidas en el markdown de esta presentacion.
-
-# Lecturas complementarias
-
-* Klugman et al (2004) *Loss Model: From Data to Decisions*, Seccion 4.7.
-
-* Panjer (2006) *Operational Risk Modeling Analytics*, Capitulo 5.

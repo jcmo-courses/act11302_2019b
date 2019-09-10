@@ -1,5 +1,5 @@
 ---
-title: "Sesion 04 - Modificacion de Distribuciones y Agregacion de Riesgos"
+title: "Sesion 06 - Agregacion de Riesgos (Calculo)"
 author:
 -  Juan Carlos Martínez-Ovando
 date: "Otoño 2019"

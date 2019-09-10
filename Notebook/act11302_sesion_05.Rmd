@@ -1,5 +1,5 @@
 ---
-title: "Sesion 04 a - Modificacion de Distribuciones (Frecuencia de Siniestros)"
+title: "Sesion 05 - Modificacion de Distribuciones (Frecuencia de Siniestros)"
 author:
 -  Juan Carlos Martínez-Ovando
 date: "Otoño 2019"
@@ -249,8 +249,7 @@ $$
 
 # Ejercicio
 
-1. Modifiquen la funcion `Poisson.Plot()` para crear la funcion `BinNeg.Plot()` para generar los resultados analogos de `Poisson.Plot()` y `Binomial.Plot()` incluidas en el markdown de esta presentacion.
-
+2. Realicen el calculo analitico para demostrar la identidad de la distribucion `binomial-negativa` como `mezcla de poisson-gamma`.
 
 # Lecturas complementarias
 
