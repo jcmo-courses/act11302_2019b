@@ -1,0 +1,285 @@
+---
+title: "Sesion 01 - Modelos de Probabilidad"
+author:
+-  Juan Carlos Martínez-Ovando
+date: "Otoño 2019"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    toc_depth: 3
+    number_sections: yes
+    self_contained: yes
+    theme: cerulean # cosmo
+    highlight: textmate
+fig_align: "center"
+fig_width: 18
+
+header-includes:
+    - \usepackage[most]{tcolorbox}
+    - \usepackage{mathtools}
+    - \definecolor{light-yellow}{rgb}{1, 0.95, 0.7}
+    - \newtcolorbox{myquote}{colback=light-yellow,grow to right by=-10mm,grow to left by=-10mm, boxrule=0pt,boxsep=0pt,breakable}
+    - \newcommand{\todo}[1]{\begin{myquote} \textbf{TODO:} \emph{#1} \end{myquote}}
+
+---
+
+\newcommand{\WiD}{\operatorname{\text{Wi}}}
+\newcommand{\WeD}{\operatorname{\text{We}}}
+\newcommand{\WeNormD}{\operatorname{\text{We-N}}}
+\newcommand{\ExpD}{\operatorname{\text{Exp}}}
+\newcommand{\BeD}{\operatorname{\text{Be}}}
+\newcommand{\GeoD}{\operatorname{\text{Geo}}}
+\newcommand{\StD}{\operatorname{\text{St}}}
+\newcommand{\NormD}{\operatorname{\text{N}}}
+\newcommand{\GaD}{\operatorname{\text{Ga}}}
+\newcommand{\UniD}{\operatorname{\text{U}}}
+\newcommand{\DirD}{\operatorname{\text{Dir}}}
+\newcommand{\IG}{\operatorname{\text{InG}}}
+\newcommand{\IncGa}{\operatorname{\text{IGa}}}
+\newcommand{\IGa}{\operatorname{\text{InGa}}}
+\newcommand{\PoD}{\operatorname{\text{Po}}}
+\newcommand{\BS}{\operatorname{\text{BS}}}
+\newcommand{\DP}{\operatorname{\text{DP}}}
+\newcommand{\BinD}{\operatorname{\text{Bin}}}
+\newcommand{\BinNegD}{\operatorname{\text{BinNeg}}}
+\newcommand{\dd}{\mathrm{d}}
+\newcommand{\Indic}{\mathbb{I}}
+\newcommand{\Borel}{\operatorname{\mathscr{B}}}
+\newcommand{\Filtration}{\operatorname{\mathscr{F}}}
+\newcommand{\Expec}{\operatorname{\mathbb{E}}}
+\newcommand{\Var}{\operatorname{\text{var}}}
+
+
+# Modelo de Probabilidad
+
+## Notacion
+
+Consideremos que:
+
+* $X$ se refiere a una variable aleatoria observable (discreta o continua) 
+
+* $x$ se refiere a un valor espec\'ifico de esta variable
+
+## Definicion
+
+Sin perdida de generalidad, refiramonos a $X$. El modelo de probabilidad se define como la distribucion de probabilidades de $X$ indizada por $\theta$, i.e.
+\begin{equation}
+  X \sim F(x|\theta).
+\end{equation}
+
+El $soporte$ de $X$, denotado por $\mathcal{X}$, se define como,	  	
+\begin{equation}
+  \mathcal{X}=\{x:F(x|\theta)>0\},
+\end{equation}
+donde $\mathcal{X}$ forma un subconjunto de un espacion Euclidiano de dimensi\'on finita.
+
+El par\'ametro $\theta$, toma valores en el espacio parametral $\Theta$ (generalmente de dimensi\'on finita).
+
+## Densidades y masa de probabilidad
+
+* Cuando $X$ es absolutamente continua, $F(x|\theta)$ admite una densidad, $f(x|\theta)$, tal que
+$$
+F(x|\theta)=\int_{-\infty}^{x}f(s|\theta)ds,
+$$
+implicando que el soporte no tenga atomos, i.e.
+$$
+\Pr(X=x)=0
+$$
+para todo $x \in \mathcal{X}$.
+			
+* Cuando $X$ es del tipo discreto, el soporte $\mathcal{X}$ esta formado solamente por atomos, i.e. valores especificos de $X$, digamos $\mathcal{X}=\{x^{*}_1,\ldots,x^{*}_n\}$ tales que 
+$$
+\Pr(X=x^{*}_i)=p_i>0,
+$$
+para todo $x^{*}_i \in \mathcal{X}$, con
+$$
+\sum_{i=1}^{n}p_i=1.
+$$ 
+
+* Cuando $X$ es del tipo mixta, el modelo de probabilidad admite una parte absolutamente continia al mismo tiempo de admitir una parte discreta, i.e.
+$$
+ \Pr(X\leq x)=F(x|\theta) = F_c(x|\theta_c)+ \sum_{x^{*}_k \leq x} p(X=x^{*}_k|\theta_d),
+$$
+donde
+
+  - $F_c(\cdot)$ es el componente continuo de la distribuci\'on
+
+  - $\{x^{*}_k\}_{k\geq 1}$ son los \'atomos de la distribuci\'on
+
+  - $\theta_c$ y $\theta_d$ son los par\'ametros asociados con la parte continua y discreta, respectivamente.
+	
+> En este tipo de distribuciones, el soporte $\mathcal{X}$ esta formado de una parte absolutamente continua (sin atomos), $\mathcal{X}_{c}$ , y una parte discreta (formada solo de atomos), $\mathcal{X}_{d}$, i.e.
+$$
+\mathcal{X}=\mathcal{X}_{c}\cup\mathcal{X}_d.
+$$
+
+## Ejemplo
+
+Pensemos en el modelo de probabilidad con un atomo en $\{0\}$ que admite la posibilidad de tomar valores en la recta real positiva, i.e.
+$$
+\mathcal{X}=\{0\}\cup(0,\infty).
+$$
+
+
+El modelo de probabilidad estara definido por una masa de probabilididad en $\{0\}$, i.e.
+$$
+\Pr(X=0)=\Pr(X\in\{0\})=\theta_0,
+$$
+y una densidad para la parte continua,
+$$
+f(x|\theta_c)=\theta_c\exp\{-x\theta_c\}\mathbb{I}_{(0,\infty)}(x),
+$$
+con $0<\theta_0<1$ y $\theta_c>0$.
+
+## Ejercicio
+
+?`Que forma toma $F(x|\theta)$ y quien es $\theta$?
+
+
+# Funcion de verosimilitud
+
+Ahora, incorporaci\'on de datos (informaci\'on)...		
+
+Consideremos un conjunto de datos $X_1=x_1,\ldots,X_n=x_n$ (no \'atomos) en el caso absolutamente continuo.
+
+* Enfoque frecuentista: Independencia
+
+\begin{equation}
+\Pr(X_1=x_1,\ldots,X_n=x_n;\theta) = \prod_{i=1}^{n} f(x_i;\theta).
+\end{equation}
+
+* Enfoque bayesiano: Independencia condicional 
+
+\begin{equation}
+\Pr(X_1=x_1,\ldots,X_n=x_n) = \int \prod_{i=1}^{n} f(x_i|\theta) \pi(\theta) \dd \theta.
+\end{equation}
+
+## Ejercicio
+
+?`Como ser\'a la expresi\'on de la funcion de verosimilitud en el caso discreto y tipo mixta?
+
+
+# Tipos de datos
+
+* Las expresiones anteriores son correctas cuando los datos son exactos. 
+
+* Cuando trabajamos con datos agrupados en $\Re_+$, modificamos el soporte $\mathcal{X}$ por una partici\'on $\{c_j\}_{j=1}^{J}$ tal que, 
+
+\begin{equation}
+c_1 < c_2 < \ldots <c_J,
+\end{equation}
+sustituyendo $\mathcal{X}$ por el conjunto,
+\begin{equation}
+\mathcal{C}=\{ (c_{j},c_{j+1}]: c_j < c_{j+1}, j=1,\ldots,J\}.
+\end{equation}
+
+## Ejercicio
+
+Como es la expresion de la funcion de verosimilitud para datos agrupados?
+
+# Distribuciones conjugadas
+En el an\'alisis bayesiano de datos, el uso de familias conjugadas entre $f(x|\theta)$ y $\pi(\theta)$ es de utilidad para obtener expresiones ana\l\'iticas cerradas en el proceso de aprendizaje.
+	  	
+
+## Familia Exponencial
+
+Las familias conjugadas est\'an definidas dentro de la  Familia Exponencial de Distribuciones (lineal), para las que la funci\'on de densidad o masa de probabilidad admiten la siguiente expresi\'on,
+	  	\begin{equation}
+	  		f(x|\theta) = p(x) q(\theta)^{-1} exp\{-\theta x\},
+	  	\end{equation}
+	  	considerando que el soporte $\mathcal{X}$ no depende de $\theta$.
+
+## Prior conjugada
+
+Las distribucion inicial conjugada para la representacion atenrior toma la forma,
+	  	\begin{equation}
+	  		\pi(\theta) = c(k_0,m_0)q(\theta)^{-k_0} exp\{-\theta m_0\},
+	  	\end{equation}
+donde $k_0$ y $m_0$ son hiper par\'ametros.
+
+
+# Prediccion
+
+## Enfoque frecuentista
+
+Bajo el enfoque frecuentista, la predicci\'on de un valor futuro de $X$, $X^f$, se obtiene a trav\'es de la imputaci\'on del EMV de $\theta$ en el modelo, i.e.
+	  	\begin{equation}
+	  		X^f|x_1\ldots,x_n \sim f(x^f|\widehat{\theta}_n),
+	  	\end{equation}
+	  	donde $\widehat{\theta}_n=\widehat{\theta}_n(x_1\ldots,x_n)$.
+
+
+## Enfoque bayesiano
+
+Bajo el enfoque bayesiano, la predicci\'on se obtiene usando argumentos probabilistas, como
+	  	\begin{equation}
+	  		p(x^f|x_1\ldots,x_n) = \int_{\Theta} f(x^f|\theta) \pi(\theta|x_1\ldots,x_n)\dd \theta,
+	  	\end{equation}
+	  	donde $\pi(\theta|x_1\ldots,x_n) \propto f(x_1\ldots,x_n|\theta)\pi(\theta)$ es la distribuci\'on de $\theta$ actualizada con la informaci\'on contenida en $x_1\ldots,x_n$.
+
+## Ejercicio
+
+Muestra que el modelo Bernoulli-beta, visto en las clases previas, es un tipo de distribuciones conjugadas.
+
+# Intercambiabilidad
+
+## Definicion
+
+Se dice que un conjunto (numerable) de variables  aleatorias $\{X_j\}_{j=1}^{\infty}$ es intercambiabiable con respecto a $\Pr$ si para todo $n$ finito,
+	  	\begin{equation}
+	  		\Pr(X_1,\ldots,X_n)=\Pr(X_{\sigma(1)},\ldots,X_{\sigma(n)}),
+	  	\end{equation}
+	  	donde $(\sigma(1),\ldots,\sigma(n))$ es cualquier permutaci\'on del vector $(1,\ldots,n)$.
+
+## Comentarios
+
+* Cualquier sucesi\'on de variables aleatorias $\iid$ es naturalmente intercambiable.
+
+* La noci\'on de intercambiabilidad, como la de independencia, se refiere a que el orden de la informaci\'on es irrelevante (i.e. los resultados anal\'iticos son
+invariantes ante permutaciones).
+
+## Ejercicio
+
+Describe un ejemplo donde los datos podr\'ian asociarse con el supuesto de
+intercambiabilidad, mas no con el de independencia. Describe tambi\'en un ejemplo donde ni 
+intercambiabilidad ni independencia ser\'ian supuestos viables.
+
+## Representacion de~Finetti
+
+Una consecuencia del supuesto de intercambiabilidad (numerable) es el teorema de representaci\'on en el que se admite que para toda sucesi\'on de variables aleatorias
+intercambiables, para toda $n$ finita, se tiene que existe  un ente estoc\'astico $\theta \in \Theta$
+acompa\~nado de una medida de probabilidad $\Pi$, tal que
+	  	\begin{equation}
+	  		\Pr(X_1,\ldots,X_n)=\int_{\Theta} \left\{ \prod_{j=1}^{n} \Pr(X_j|\theta) \right\} \Pi(\dd \theta),
+	  	\end{equation}
+	  	donde $(\sigma(1),\ldots,\sigma(n))$ es cualquier permutaci\'on del vector $(1,\ldots,n)$.
+
+## Comentarios
+
+* El resultado anterior es de {\em existencia}, i.e. no nombra c\'omo se lleva a cabo tal representaci\'on.
+
+* Para un conjunto de variables aleatorias intercambiables existen m\'as de una posible representaci\'on como la anterior (en t\'erminos de diferentes
+especificaciones de $\theta$ y/o de $\Pi$).
+
+* Este teorema de representaci\'on brinda una interpretaci\'on al paradigma bayesiano de inferencia.
+
+# Ejercicio
+
+Consideremos el caso sencillo donde $X$ es discreta con soporte en $\mathcal{X}=\{0,1\}$.
+
+* Defina el modelo de probabilidad para $X$. 
+
+* Identifique el par\'ametro del modelo.
+
+* Defina la varosimilitud para el par\'ametro basado en el supuesto de $independencia$ con base en tres datos $x_1=1$, $x_2=1$ y $x_3=1$.
+
+* Calcule la distribuci\'on predictiva para $X_4$.
+
+* Examine la forma gen\'erica de la funci\'on de verosimilitud para el par\'ametro del modelo.
+
+* Identifique la distribucion $\Pi$ conjugada.
+
+* Calcule la distribuci\'on predictiva para $X_4$ usando los mismos datos empleados anteriormente, $x_1,x_2,x_3$.
+
+
