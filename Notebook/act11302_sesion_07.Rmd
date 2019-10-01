@@ -1,0 +1,579 @@
+---
+title: "Sesion 07 - Agregacion de Riesgos (Riesgo Colectivo)"
+author:
+-  Juan Carlos Martínez-Ovando
+date: "Otoño 2019"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    toc_depth: 3
+    number_sections: yes
+    self_contained: yes
+    theme: cerulean # cosmo
+    highlight: textmate
+fig_align: "center"
+fig_width: 18
+
+header-includes:
+    - \usepackage[most]{tcolorbox}
+    - \usepackage{mathtools}
+    - \definecolor{light-yellow}{rgb}{1, 0.95, 0.7}
+    - \newtcolorbox{myquote}{colback=light-yellow,grow to right by=-10mm,grow to left by=-10mm, boxrule=0pt,boxsep=0pt,breakable}
+    - \newcommand{\todo}[1]{\begin{myquote} \textbf{TODO:} \emph{#1} \end{myquote}}
+
+---
+
+\newcommand{\WiD}{\operatorname{\text{Wi}}}
+\newcommand{\WeD}{\operatorname{\text{We}}}
+\newcommand{\WeNormD}{\operatorname{\text{We-N}}}
+\newcommand{\ExpD}{\operatorname{\text{Exp}}}
+\newcommand{\BeD}{\operatorname{\text{Be}}}
+\newcommand{\GeoD}{\operatorname{\text{Geo}}}
+\newcommand{\StD}{\operatorname{\text{St}}}
+\newcommand{\logNormD}{\operatorname{\text{logN}}}
+\newcommand{\NormD}{\operatorname{\text{N}}}
+\newcommand{\GaD}{\operatorname{\text{Ga}}}
+\newcommand{\UniD}{\operatorname{\text{U}}}
+\newcommand{\DirD}{\operatorname{\text{Dir}}}
+\newcommand{\IG}{\operatorname{\text{InG}}}
+\newcommand{\IncGa}{\operatorname{\text{IGa}}}
+\newcommand{\IGa}{\operatorname{\text{InGa}}}
+\newcommand{\PoD}{\operatorname{\text{Po}}}
+\newcommand{\BS}{\operatorname{\text{BS}}}
+\newcommand{\DP}{\operatorname{\text{DP}}}
+\newcommand{\BinD}{\operatorname{\text{Bin}}}
+\newcommand{\BinNegD}{\operatorname{\text{BinNeg}}}
+\newcommand{\dd}{\mathrm{d}}
+\newcommand{\Indic}{\mathbb{I}}
+\newcommand{\Borel}{\operatorname{\mathscr{B}}}
+\newcommand{\Filtration}{\operatorname{\mathscr{F}}}
+\newcommand{\Expec}{\operatorname{\mathbb{E}}}
+\newcommand{\Var}{\operatorname{\text{var}}}
+
+---
+
+# Objetivos
+
+* Estudiaremos procedimientos generales para el calculo de la distribucion de riesgos agregados, $S_t$ bajo el enfoque de _riesgo colectivo_.
+
+* Aplicaremos aproximaciones para el calculo de probabilidades en el extremo derecho de la distribucion de riesgos agregados, $\mathbb{P}(S_t > U)$.
+
+---
+
+
+# Distribuciones compuestas
+
+La distribucion de _riesgos agregados_, $F_{S_t}(s)$, depende de dos distribuciones:
+
+* Distribucion primaria, sobre la _frecuencia de siniestros_, $F_{N_t}(n)$, y
+
+* Distribucion secundaria, sobre la _severidad de siniestros individuales_, $F_X(x)$.
+
+De esta forma, bajo el _supuesto de simetria estocastica y homogeneidad_, tenemos que la **distribucion de riesgos agregados** se calculara como
+$$
+F_{S_t}(s)=\sum_{n} F^{*(n)}_X(s) f_n,
+$$
+donde 
+
+* $F^{*(n)}_X(s)$ es la distribucion de la convolucion de $n$-terminos de $F_X(x)$, 
+
+* mientras que $f_n=\mathbb{P}(N_t=n)$.
+
+> Recodemos que en caso, i.e. el modelo bajo el _enfoque de riesgo colectivo_, implicitamente el soporte de $F_X(x)$ es $(0,\infty)$ bajo _continuidad absoluta_.
+
+> En este caso, se dice que la variable aleatoria $S_t$ es **compuesta**, i.e. la distribucion $F_{S_t}(s)$ es de **tipo compuesta**.
+
+## Momentos
+
+En lo subsecuente, denotaremos el $k$-esimo momento de $X$ bajo $F_X(s)$ como
+$$\mu^k = \mathbb{E}(X^k).$$
+
+De esta forma, si estuviesemos interesados en calcular solo _momentos_ de la distribucion de riesgos agregados, tendriamos:
+
+\begin{eqnarray}
+\mathbb{E}_{F_{S_t}}(S_t)
+  & = & \mathbb{E}_{F_{N_t}}\left(\mathbb{E}_{F_X}(S_t|N_t)\right)  \nonumber \\
+  & = &\sum_n \mathbb{E}_{F_X}(X_1+\cdots,X_n|N_t = n) f_n \nonumber \\
+  & = &\sum_n \mathbb{E}_{F_X}(X_1+\cdots,X_n) f_n \nonumber \\
+  & = &\sum_n n \mu^1 f_n \nonumber \\
+  & = & \mu^1 \sum_n n f_n \nonumber \\
+  & = & \mu^1 \mathbb{E}_{F_{N_t}}(N_t). \nonumber
+\end{eqnarray}
+
+> Reflexionemos acerca de los supuestos que conducen al resultado anterior...
+
+De manera analoga, la varianza de $S_t$ puede calcularse como
+\begin{eqnarray}
+var_{F_{S_t}}(S_t) 
+  & = & \mathbb{E}_{F_{N_t}}\left(var_{F_X}(S_t|N_t)\right) + var_{F_{N_t}}\left(\mathbb{E}_{F_X}(S_t|N_t)\right) \nonumber \\
+  & = & \mathbb{E}_{F_{N_t}}\left(N_t var(X)\right) + var\left(N_t \mu^1\right) \nonumber \\
+  & = & \mathbb{E}_{F_{N_t}}(N_t)var_{F_X}{X} + \mu^1 var_{F_{N_t}}(N_t).
+\end{eqnarray}
+
+> Cuando $N_t$ tenga asociada una distribucion Poisson, tendremos que el resultado anterior se simplifica a
+$$
+var_{F_{S_t}}(S_t) = \mathbb{E}_{F_{N_t}}(N_t) \mu^2.
+$$
+
+## Ejercicio 1
+
+Empleen el procedimiento analogo al anterior para obtener la funcion generadora de momentos de $F_{S_t}(s)$. El resultado a obtener es $$M_{S_t}(w)=M_{N_t}\left(\log M_X(w)\right),$$ siendo $M_X(w)$ y $M_{N_t}(w)$ las funciones generadoras de momentos marginales para $X$ y $N_t$, respectivamente.
+
+## Ejemplo 1
+
+Aplicando el resultado del **ejercicio a entregar**, podemos obtener analiticamente la distribucion de riesgos agregados del modelo en el que:
+
+a. La distribucion primaria es $\GeoD(N_t|\theta)$,
+
+b. La distribucion secundaria es $\ExpD(X|\lambda=1)$.
+
+Recordando que 
+\begin{eqnarray}
+M_{N_t}(w) & = & \frac{\theta}{1-(1-\theta)e^w}, \nonumber \\
+M_{X}(w) & = & \left(1-w\right)^{-1}, \nonumber \\
+\end{eqnarray}
+tenemos que 
+$$
+M_{S_t}(w) = \theta + (1-\theta)\frac{\theta}{\theta-w}.
+$$
+> ?`Que distribucion es la asociada a $M_{S_t}(w)$?
+
+## Ejercicio 2
+
+Encuentren la distribucion asociada con el modelo compuesto donde:
+
+a. La distribucion primaria es $\GeoD(N_t|\theta)$ modificada en $0$,
+
+b. La distribucion secundaria es $\ExpD(X|\lambda=1)$.
+
+## Caso severidades discretizadas
+
+En ocasiones, la distribucion de _severidades individuales_, $F_X(x)$, puede ser discretizada, con soporte en 
+$$\mathcal{X}^d=\{x^*_1,\dots,x^*_D\},
+$$
+(siendo $D$ posiblemente infinito), con masas de probabilidades
+$$
+\pi_k = \mathbb{P}(X=x^*_k).
+$$
+En este caso, los riesgos agregados $S_t$ seran definidos como la suma de los riesgos particulares para cada valor $x^*_k$ particular, i.e.
+\begin{eqnarray}
+S_t 
+  & = & \sum_{j=0}^{N_t} X_{tj} \nonumber \\ 
+  & = & x*_1 N_{t1} + x^*_2 N_{t2} + \cdots + x^*_D N_{tD}, \nonumber 
+\end{eqnarray}
+donde $N_{tk}$ es el numero (aleatorio/desconocido) de riesgos que tuvieron una siniestralidad igual a $X^*_k$.
+
+Se debe satisfacer la relacion composicional,
+$$
+N_t = N_{t1} + \cdots + N_{tD}.
+$$
+
+> Se sigue que si $N_t$ sigue una distribucion Poisson con tasa de intensidad $\lambda_t$, entonces cada $N_{tk}$ sigue una distribucion Poisson tambien con tasa de intensidad dada por $$\lambda_{tk}=\pi_k \lambda_t,$$ para todo $k$.
+
+> Esta propiedad de desagregacion es muy impotante para el proceso de diversificacion de riesgos via mezclas.
+
+## Ejemplo 2
+
+En este ejemplo, veremos como realizar el calculo exacto de la _distribucion de riesgos agregados_ $S_t$ cuando:
+
+a. $X$ es una variable aleatoria discretizada no negativa, y
+
+b. $N_t \sim \PoD(n|\lambda)$.
+
+El calculo exacto se obtiene empleando el script `IntVal.Poisson.R` que se encuentra en la subcarpeta [Scripts].
+
+ - En el siguiente ejemplo, la variable $X$ tiene _soporete discretizado_ en $\mathcal{X}=\{1,2,3,4\}$. 
+ 
+ - Por omision, las masas de probabilidades se definen en $\pi_k=k/K$, con $K=1+2+3+4$.
+ 
+ - La tasa de intensidad de la distribucion Poisson se define en $\lambda=4$.
+
+Las masas de probabilidad y soporte de $F_{S_t}(s)$ generado para este ejemplo particular se calcula de la siguiente forma:
+
+```{r}
+source("./Scripts/IntVal.Poisson.R")
+
+f_S <- IntVal.Poisson(c(1,2,3,4))
+f_S
+plot(f_S,xlab="s")
+```
+
+> Revisen el codigo del script `IntVal.Poisson.R`.
+
+## Ejemplo 3
+
+El calculo explicito involucrado en el script `IntVal.Poisson.R` puede ser particularmente costoso, desde un punto de vista computacional. Por esta razon, Panjer diseno un algoritmo computacional mas eficiente para el calculo de $F_S(s)$ conocido como el **algoritmo de recursion de Panjer**.
+
+* El algoritmo de recursion de Panjer descansa en el supuesto que:
+
+a. $F_{N_t}(n)$ pertenece a la clase $(a,b,0)$ --o a la clase $(a,b,1)$--,
+
+b. El soporte de $X$ es discretizado en $\mathcal{X}=\{0,1,2,3\ldots,D\}$, siendo $D$ potencialmente infinito.
+
+De esta forma, respecto a la frecuencia de siniestros, tenemos
+$$
+f_n = \left(a+\frac{b}{n}\right)f_{n-1},
+$$
+para $n=1,2,\ldots$, con $f_0$ dado.
+
+De esta forma, se cumplen las siguientes relaciones:
+
+$$
+f^S_0 = \mathbb{P}(S_t=0) 
+\begin{cases}
+\mathbb{P}(N_t=0), & \text{ si } \pi_0=0,\\
+M_{N_t}(\log \pi_0),& \text{ si } \pi_0 > 0.
+\end{cases} 
+$$
+Y, para todos los valores en el soporte $\mathcal{S}$ distintos de $0$, se cumple
+$$
+f^S_s = \frac{1}{1-a\pi_0}\sum_{h=1}^{s}\left(a + \frac{bh}{s}\right)\pi_h f_{s-h}.
+$$
+La implementcion de esta recursion la pueden encontrar en el codigo `Panjer.Poisson.R` para el caso $N_t$ distribuido Poisson dentro de la subcarpeta [Scripts].
+
+En el ejemplo, las masas de probabilidad $\pi_k$ estan dadas por el vector `c(.1,0.2,0.3,0.4)`, mientras que la tasa de intensidad de la distribucion Poisson es $\lambda=4$.
+
+```{r}
+source("./Scripts/Panjer.Poisson.R")
+
+f_S <- Panjer.Poisson(c(.1,0.2,0.3,0.4), 4) * exp(4)
+f_S
+plot(f_S,xlab="s")
+```
+
+> Revisen el codigo del script `Panjer.Poisson.R`.
+
+# Probabilidades en extremo derecho
+
+> Como hemos mencionado antes, es de suma importancia modelar la distribucion de _riesgos agregados_ de manera que la probabilidad $$\mathbb{P}(S_t >U),$$ sea **eficente** y **prudencialmente** calculada. 
+
+De esta forma, en esta parte de la sesion exploraremos la forma de calcular la probabilidad en extremos en el caso de riesgos agregados,
+$$
+S_t = \sum_{j=1}^{N_t} X_{tj},
+$$
+donde
+$$
+N_t \sim \PoD(n|\lambda_t),
+$$
+y
+$$
+X_{tj} \sim^{iid} F_X(x).
+$$
+considerando que $$N_t \text{ y } (X_{tj})_{j\geq 1},$$
+sean _independientes estocasticamente_ (i.e. *mutuamente separables*).
+
+Es decir, estamos intereados en calcular la distribucion
+$$
+F_{S_t}(s) = \mathbb{P}(S_t \leq s),
+$$
+y, a partir de ella, calcular
+$$
+\mathbb{P}(S_t > U),
+$$
+para un valor de $U$ grande, o calcular $U_\alpha$ tal que
+$$
+\mathbb{P}(S_t > U_{\alpha}) \leq \left(1-\alpha\right),
+$$
+para valores de $$\alpha \approx 1.$$
+
+## Ejemplo 4
+
+Ilustraremos, en particular, el calculo de estas probabilidades considerando el caso en que 
+$$
+F_X(x) = \logNormD(x|\mu, \sigma^2).
+$$
+
+Consideraremos ademas, para esta practica, el uso de datos simulados con los siguientes parametros:
+
+* $\lambda = 50$,
+
+* $\mu = 5$,
+
+* $\sigma^2 = 25$;
+
+con los umbrales dados por los parametros
+
+* $U = 2,000$ y $\alpha = 0.99$.
+
+```{r}
+lambda <- 50
+mu <- 5
+sigma2 <- 1
+q <- 20000
+alpha <- 0.99
+```
+
+Recordemos que respecto a la distribucion $\PoD(n|\lambda)$, el parametro $\lambda$ representa la intensidad de la distribucion, caracterizando el primero y segundo momentos de la misma.
+
+Respecto a la distribucion log-normal, $logNormD(x|\mu,\sigma^2)$, recordemos que los parametros caracterizan los siguientes momentos:
+\begin{eqnarray}
+\matbb{E}(X|\mu,\sigma^2) & = & \exp\left\{\mu + (\sigma^2)/2\right\},\nonumber \\
+var(X|\mu,\sigma^2) = \left(\exp\{\sigma^2\}-1\right) \exp\left\{2*\mu + \sigma^2\}.\nonumber
+\end{eqnarray}
+
+De esta forma, los primeros tres momentos de la distribucion $F_{S_t}(s)$ son:
+
+a. Media
+
+$$
+\mathbb{E}(S_t|\lambda,\mu.\sigma^2) = \lambda \ \mu^1_{X},
+$$
+
+b. Varianza
+
+$$
+var(S_t|\lambda,\mu.\sigma^2) = \lambda \ var(X|\mu,\sigma^2),
+$$
+
+c. Sesgo
+
+$$
+skew(S_t|\lambda,\mu.\sigma^2) = \frac{\mu^3_{X}}{\left(\lambda \  var(X|\mu,\sigma^2)^3\right)^{1/2}},
+$$
+siendo $\mu^k_{X}$ el $k$-esimo momento de la distribucion $F_X(x)$ de severidades individuales.
+
+El calculo de los momentos de la distribucion log-normal se obtienen con el cordigo `logNormal.moment.R` contenido en la subcarpeta [Scripts] (revisenlo, es muy sencillo).
+
+De esta forma, los primeros tres momentos de la distribucion $F_{S_t}(s)$ referidos a:
+
+a. Media
+
+b. Varianza
+
+c. Sesgo,
+
+se obtienen analiticamente como:
+
+```{r}
+source("./Scripts/logNormal.moment.R")
+E.S <- lambda * logNormal.moment(1, mu = mu, sig = sigma2)
+E.S
+
+var.S <- lambda * logNormal.moment(2, mu = mu, sig = sigma2)
+var.S
+
+skew.S <- logNormal.moment(3, mu = mu, sig = sigma2) /
+    sqrt(lambda * (logNormal.moment(2, mu = mu, sig = sigma2))^3) # skew(S)
+skew.S
+```
+
+> Aunque estos tres parametros no estan relacionados directamente con el calculo de las probabilidades en el extremo derecho de la distribucion $F_{S_t}(s)$, pueden ser empleados para aproximar tales probabilidades empleando *aproximaciones asintoticas*. En particular, consideraremos dos de ellas.
+
+## Aproximacion normal
+
+Recordemos que en este caso, asintoticamente, aunque $N_t$ sea aleatorio, por el TCL, tenemos
+$$
+S_t \approx \NormD(s|\mu_S,\sigma_S^2)
+$$
+donde 
+\begin{eqnarray}
+\mu_S & = & \mathbb{E}_{F_{S_t}}(S_t), \nonumber \\
+\sigma_S & = & var_{F_{S_t}}(S_t). \nonumber
+\end{eqnarray}
+Idea: Assume S follows a normal distribution with parameters given by the
+(true or estimated; here: true) mean and variance of S, so
+
+
+Asi, podemos aproximar tres caracteristicas en el extremo derecho de la distribucion:
+
+a. $\mathbb{P}(S_t > U)$
+
+b. $\text{VaR}_\alpha(S_t)$
+
+c. $\text{ES}_\alpha(S_t)$.
+
+Estas probabilidades estan en el orden:
+
+```{r}
+tprob.N <- pnorm(q, mean = E.S, sd = sqrt(var.S), lower.tail = FALSE)
+tprob.N
+
+VaR.N <- E.S + sqrt(var.S) * qnorm(alpha)
+VaR.N
+
+ES.N <- E.S + sqrt(var.S) * dnorm(qnorm(alpha)) / (1-alpha)
+ES.N
+```
+
+## Aproximacion con gamma trasladada
+
+Las mismas caracteristicas las aproximaremos empleando la distribucion asintotica gamma trasladada que vimos en clase previamente.
+
+Recordemos que la distribucion gamma trasladada en $k$ se obtiene como
+$$
+S_t = k + G,
+$$
+donde 
+$$
+G \sim \GaD(g|a, b).
+$$
+
+De esta forma, sabemos que:
+
+ - $\mathbb{E}_{\GaD}(S_t) = k + \frac{a}{b}$,
+
+ - $var_{\GaD}(S_t) = \frac{a}{b^2}$,
+
+ - $skew_{\GaD}(S_t) = \frac{2}{\sqrt{a}}$.
+
+De esta forma, empatando los momentos bajo la distribucion $F_S(s)$ con los de la distribucion $\GaD(s|k,a,b)$, encontramos la siguientes relaciones:
+
+  - $\hat{a} = \left(\frac{2}{skew(S_t)}\right)^2$
+
+  - $\hat{b} = \sqrt{\frac{\hat{a}}{var(S_t)}}$
+
+  - $\hat{k} = \mathbb{E}(S_t) - \frac{\hat{a}}{\hat{b}}$.
+
+Los calculos pueden obtenerse en `R` de manera sencilla como se muestra a continuacion:
+
+```{r}
+shape <- (2/skew.S)^2
+shape
+
+rate <- sqrt(shape/var.S)
+rate
+
+k <- E.S - shape/rate
+k
+```
+
+Una vez identificados estos parametros, podemos calcular las caracteristicas en el extremo derecho de la distribucion, entendiendo que:
+
+a. Probabilidad,
+\begin{eqnarray}
+\bar{F}_S(U)
+ & = & P(S > U) \nonumber \\
+ & = & \mathbb{P}(S-k > U-k) \nonumber \\
+ & = & \mathbb{P}(G > U-k) \nonumber \\
+ & = & \bar{F}_G(U-k).\nonumber
+\end{eqnarray}
+ 
+
+b. Valor en riesgo,
+\begin{eqnarray}
+\text{VaR}_{\alpha}(S_t) 
+  & = & F^{-1}_S(\alpha) \nonumber \\
+  & = & k + F_G^{-1}(\alpha).\nonumber
+\end{eqnarray}
+  
+
+c. *Expected shortfall*
+\begin{eqnarray}
+\text{ES}_\alpha(S_t) 
+  & = & \left(\frac{1}{1-\alpha}\right) \int_\alpha^1 \text{VaR}_u(S_t) \text{d}u  \nonumber \\
+  & = & k + \left(\frac{1}{1-\alpha}\right) \int_\alpha^1 F_G^{-1}(u) \text{d}u \nonumber \\
+  & = & k + \left(\frac{1}{1-\alpha}\right) \int_{F_G^{-1}(\alpha)}^\text{inf} x \ f_G(x) \text{d}x. \nonumber
+\end{eqnarray}
+
+> Notemos que $x*f_G(x) = (shape/rate) * <density of Gamma(shape + 1, rate) at x>, so
+                     = k + ((shape/rate) / (1-alpha)) * P(G' > F_G^{-1}(alpha))
+                       for G' ~ Gamma(shape + 1, rate).
+                       
+Los calculos, bajo esta aproximacion, resultan en:
+
+```{r}
+tprob.tg <- pgamma(q-k, shape = shape, rate = rate, lower.tail = FALSE)
+tprob.tg
+
+VaR.tg <- k + qgamma(alpha, shape = shape, rate = rate)
+VaR.tg
+
+ES.tg <- k + ((shape/rate) / (1-alpha)) *
+     pgamma(qgamma(alpha, shape = shape, rate = rate),
+            shape = shape + 1, rate = rate, lower.tail = FALSE)
+ES.tg
+```
+
+## Aproximacion via recursion de Panjer
+
+Consideremos ahora que discretizamos la distribucion log-normal de manera que las $X_{tj}$'s tengan soporte en 
+$$
+\mathcal{X}^d = \{0,1,2,...\}
+$$
+con
+$$
+\pi_k = \mathbb(X_j = k).
+$$
+
+De manera complementaria, $N_t$ tendra un soporte discreto en
+$$
+\mathcal{N} = \{0,1,2,...\},
+$$
+con 
+$$
+f_n = \mathbb{P}(N_t = n)
+$$
+definidos dentro de la clase $(a,b,0)$ adecuada.
+
+Aplicando, en primer lugar la **discretizacion de ** $F_X(x)$ tenemos:
+
+```{r}
+nsteps <- 50000
+stopifnot(nsteps + 1 >= floor(q))
+
+pts <- c(0, 1:(nsteps+1)- 0.5) # x**_k
+f <- diff(plnorm(pts, meanlog = mu, sdlog = sigma2)) # length = nsteps + 1
+```
+
+Aplicando ahora la **recursion de Panjer**, obtenemos las masas de probabilidad para $F_{S_t}(s)$:
+```{r}
+a <- 0
+b <- lambda
+s <- numeric(nsteps+1)
+s[1] <- exp(lambda * (f[1] - 1))
+fct <- 1 - f[1] * a
+for(k in 1:nsteps) {
+    j <- 1:k
+    s[k+1] <- fct * sum((a + b*j/k) * f[j+1] * s[k-j+1])
+}
+```
+
+A partir de estas masas de probabilidades, calculamos las caracteristicas en el extremo derecho de la *distribucion de riesgs agregados*:
+
+```{r}
+S.df <- cumsum(s)
+
+tprob.pr <- 1 - S.df[floor(q)]
+tprob.pr
+
+ii <- which(S.df >= alpha)
+stopifnot(length(ii) > 0)
+VaR.pr <- min(ii)
+VaR.pr
+
+ES.pr <- sum((ii-1) * s[ii]) / (1-alpha)
+ES.pr
+```
+
+## Comparacion
+
+Calculando las aproximaciones de $\mathbb{P}(S_t > U)$, tenemos
+```
+probs <- as.data.frame(c(tprob.N,tprob.tg,tprob.pr))
+colnames(probs) <- c("P(S>U)")
+rownames(probs) <- c("Normal","GammaT","Panjer")
+probs
+```
+
+Calculando las aproximaciones de $\text{VaR}_\alpha(S_t)$, tenemos
+```
+VaRs <- as.data.frame(c(VaR.N,VaR.tg,VaR.pr))
+colnames(VaRs) <- c("VaR")
+rownames(VaRs) <- c("Normal","GammaT","Panjer")
+VaRs
+```
+
+Calculando las aproximaciones de $\text{ES}_\alpha(S_t)$, tenemos
+```
+ESs <- as.data.frame(c(ES.N,ES.tg,ES.pr))
+colnames(ESs) <- c("ES")
+rownames(ESs) <- c("Normal","GammaT","Panjer")
+ESs
+```
+
+# Comentarios
+
+* En la siguiente sesion compararemos los calculos anteriores con los que se obtendrian via simulacion estocastica.
+
+* Revisen el codigo/scripts y aproximaciones asintoticas.
