@@ -1,6 +1,6 @@
 # Calculo Actuarial III
 
-*Otono 2019*
+*Otoño 2019*
 
 ---
 
@@ -14,4 +14,8 @@
 
 * `Sesion 05` - Frecuencia de siniestros (modificaciones)
 
-* `Sesion 06` - Agregacion de riesgos (calculos)
+* `Sesion 07` - Agregacion de riesgos
+
+* `Sesion 08` - Modificacion de distribuciones (condiciones de poliza)
+
+* `Sesion 09` - Estimacion de distirbuciones
