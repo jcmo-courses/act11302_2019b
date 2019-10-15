@@ -1,6 +1,6 @@
 # Calculo Actuarial III
 
-*Otoño 2019*
+*Otono 2019*
 
 ---
 
@@ -18,4 +18,8 @@
 
 * `Sesion 08` - Modificacion de distribuciones (condiciones de poliza)
 
-* `Sesion 09` - Estimacion de distirbuciones
+* `Sesion 09` - Estimacion de distribuciones
+
+* `Sesion 10a` - Teoria de ruina
+
+* `Sesion 10b` - Primas de riesgo
