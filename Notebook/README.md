@@ -1,25 +1,27 @@
-# Calculo Actuarial III
+# Cálculo Actuarial III
 
-*Otono 2019*
+*Otoño 2019*
 
 ---
 
-* `Sesion 01` - Modelos de probabilidad
+* `Sesión 01` - Modelos de probabilidad
 
-* `Sesion 02` - Aprendizaje estadistico
+* `Sesión 02` - Aprendizaje estadístico
 
-* `Sesion 03` - Enfoques de agregacion de riesgos
+* `Sesión 03` - Enfoques de agregación de riesgos
 
-* `Sesion 04` - Frecuencia de siniestros (distribuciones)
+* `Sesión 04` - Frecuencia de siniestros (distribuciones)
 
-* `Sesion 05` - Frecuencia de siniestros (modificaciones)
+* `Sesión 05` - Frecuencia de siniestros (modificaciones)
 
-* `Sesion 07` - Agregacion de riesgos
+* `Sesión 07` - Agregación de riesgos
 
-* `Sesion 08` - Modificacion de distribuciones (condiciones de poliza)
+* `Sesión 08` - Modificación de distribuciones (condiciones de póliza)
 
-* `Sesion 09` - Estimacion de distribuciones
+* `Sesión 09a` - Teoría de ruina
 
-* `Sesion 10a` - Teoria de ruina
+* `Sesión 09b` - Primas de riesgo
 
-* `Sesion 10b` - Primas de riesgo
+* `Sesión 10` - Estimación de distribuciones
+
+* `Sesión 11` - Examen parcial 1
