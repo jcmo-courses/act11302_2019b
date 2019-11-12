@@ -55,9 +55,11 @@ header-includes:
 
 # Objetivos
 
-* Uno
+* Estudiaremos la especificacion de diferentes modelos de probabilidad para modelar las severidades individuales.
 
-* Dos
+* Revisaremos diferentes procedimientos para comparar y seleccionar modelos de probabilidad en este contexto.
+
+* Ilustraremos esta sesion con los datos de `AllState`.
 
 ---
 
@@ -160,41 +162,197 @@ Observamos un patron marginalmente diferenciado de los datos de `2005` y `2006` 
 
 Examinaremos estos aspectos con detalle mas adelante. Por lo pronto, consideremos los siguientes escenarios de `entrenamiento` y `prueba`.
 
-## Escenarios de aprendizaje
+# Escenarios de aprendizaje
 
-Consideraremos los siguientes dos escenarios de aprendizaje:
 
-> **Aprendizaje I:-** Datos de `entrenamiento` para `2005` y de `prueba` para `2006`. 
+## Aprendizaje I
 
-> **Aprendizaje II:-** Datos de `entrenamiento` para `2005,2006` y de `prueba` para `2007`. 
+Datos de `entrenamiento` para `2005` y de `prueba` para `2006`. 
 
-# Modelos
+## Aprendizaje II
+
+Datos de `entrenamiento` para `2005,2006` y de `prueba` para `2007`. 
+
+# Definiciones y propiedades 
+
+## Preliminares
+
+* El estudio de montos de siniestralidad (individual y/o agregada) requiere entender la posibilidad de incidencia de riesgos de montos grandes. 
+
+* Para eso, es escencial entender y cuantificar observaciones *ralas* caracterizadas por el **extremo derecho de la probabilidad subyacente** (a.k.a. *right-tail*). 
+
+> Tal probabilidad se define en terminos de la incidencia condicional como la **funcion hazard**, $h(x)$, definida como
+$$
+h_{X}(x):=\frac{f_{X}(x)}{1-F_{X}(x)}\mathbb{I}_{[0,\infty)}(x),
+$$
+donde $f_{X}(x)$ denota la *densidad de probabilidades*, y $F_{X}(x)$ la *distribucion de probabilidades acumuladas*.
+
+De esta definicion se desprende la **funcion de severidades esperadas en exceso** de una cierta cantidad $x^*$, la cual se define como
+\begin{eqnarray}
+  e_X(x^*) & = & \mathbb{E}_{F_X}(X|X>x^*) - x^* \nonumber \\
+         & = &  \frac{\int_{x^*}^{\infty}(x-x^*)f_{X}(x)dx}{\int_{x^*}^{\infty}xf_{X}(x)dx},\nonumber
+\end{eqnarray}
+definida para todo $x^* \geq 0$.
+
+Las funciones $h(x)$ y $e(x)$ estan mutuamente relacionadas, en el caso continuo, como:
+$$
+h_X(x) = \frac{1+e_X'(x)}{e_X(x)},
+$$
+para $x\geq 0$.
+
+De estas definiciones se desprenden algunas consideraciones adicionales:
+
+a. La funcion $h_X(x)$ caracteriza el cambio de probabilidad de incidencia para motos en exceso de $x$, y como tal probabilidad decrece cuando $x$ se incrementa.
+
+
+b. El comportamiento anterior da origen a la nocion de **variacion regular**, en la cual se define la tasa de cambio en $h(\cdot)$ antes variaciones escalares de $x$, i.e.
+$$
+\lim_{x\rightarrow \infty} \frac{h_{X}(tx)}{h_{X}(x)}=t^\rho,
+$$
+donde $\rho$ denota el indice de la variacion regular de la funcion $h_X(\cdot)$. 
+
+> Asi, tenemos los siguientes casos:
+1. caso $\rho = 0$, refiere a *variaciones lentas a infinito*.
+2. caso $\rho \neq 0$, refiere a *variaciones regulares a infinito*.
+
+> De esta forma, los **modelos de probabilidad** para severidades individuales son tipicamente estudiados en terminos de la *funcion hazard*. Comportamientos semejantes de diferentes funciones $h_X(x)$ definen **sistemas de distribuciones de probabilidad** (revisen la seccion 2.3 de Kleiber y Kotz para mas detalles).
+
+## Modelos
 
 Recordemos, en este laboratorio solo estamos prestando atencion al estudio de la `distribucion de severidades individuales`. De esta forma, y de manera consistente con las distribuciones de la `session 22` de nuestro curso, porponemos los siguientes modelos:
 
-1. Funcion de distribucion empirica (EDF, por sus siglas en ingles)
+### Funcion de distribucion empirica (EDF, por sus siglas en ingles)
 
 Obtendremos la estimacion de la EDF empleando la libreria `EnvStats`. Recuerden, que el calculo es relativamente sencillo de obtener sin emplear esta libreria.
 
-2. Distribucion Pareto
+### Distribucion Pareto
 
-La estimacion por `maxima verosimilitud` y `minimos cuadrados` de la distribucion Pareto se obtiene en `R` empleando la libreria `EnvStats`.
 
-3. Distribucion Lognormal
+La dsitribucion Pareto se define como
+$$
+F_X(x|\tau,\alpha)=\left(1-\left(\frac{x}{\tau}\right)^{-\alpha}\right)\mathbb{I}_{[\tau,\infty)}(x),
+$$
+para $\tau>0$ y $\alpha>0$. De esta forma, la funcion de densidad asociada es
+$$
+f_X(x)=\frac{\alpha\tau^{\alpha}}{x^{\alpha+1}}\mathbb{I}_{[\tau,\infty)}(x).
+$$
 
-La estimacion de parametros via `maxima verosimilitud` de la distribucion lognormal la obtendremos empleando la libreria `MASS`. Recuerden que la estimacion directa es relativamente sencilla, tambien.
+* Cuando $\alpha$, el parametro de forma, es pequeno el peso de la *cola derecha de la distribucion* es mayor. 
 
-4. Distribucion gamma generalizada
+* Los momentos de la distribucion Pareto tienen una forma analitica cerrada, dada por
+$$
+\mathbb{E}\left(X^k\right) = \frac{\alpha \tau^k}{\alpha-k}.
+$$
 
-La estimacion por `maxima verosimilitud` de los tres parametros de la distribucion gamma generalizada puede obtnerse empleando la libreria `VGAM`.
+> Estimar los parametros $\alpha$ (forma) y $\tau$ (escala), de manera conjunta, no tiene una solucion analitica cerrada. Usualmente se emplean metodos numericos, sobre todo para corregir por sesgos de los estimadores, en particular asociados con el parametro de escala, $\tau$, que restringe el soporte de la distribucion.
 
-5. Distribucion beta generalizada del segundo tipo
+La estimacion de parametros via `maxima verosimilitud` y `minimos cuadrados` puede obtenerse en `R` empleando la libreria `EnvStats`.
 
-La estimacion de los parametros de la distribucion beta generalizada del segundo tipo la obtendremos via `maxima varosimilitud` empleando la libreria `GB2`.
+### Distribucion Lognormal
 
-6. Distribucion Pareto generalizada
+La distribucion lognormal se define como
+$$
+F_X(x|\mu,\sigma)=\Phi\left(\frac{\log x - \mu}{\sigma}\right)\mathbb{I}_{(0,\infty)}(x),
+$$
+donde $\Phi(\cdot)$ denota la funcion de distribucion Gaussiana estandar, siendo $\exp\{\mu\}$ el parametro de escala y $\sigma$ el parametro de forma.
 
-La estimacion de los parametros de la distribucion Pareto generalizada empleando `maxima verosimilitud` puede obtenerse empleando la libreria `evir`. Esta libreria incluye otros metodos de estimacion, de manera alternativa, pero no los consideraremos en este laboratorio. 
+La funcion de densidad asociada es de la forma,
+$$
+f_{X}(x)=\frac{1}{x\sigma(2\pi)^{1/2}}\exp\left\{-\frac{1}{2\sigma^2}(\log x-\mu)^2\right\}\mathbb{I}_{(0,\infty)}(x).
+$$
+* Este modelo no tiene una *funcion hazard* de manera analitica cerrada.
+
+* Los momentos de la distribucion lognormal pueden recuperarse como
+$$
+\mathbb{E}\left(X^k\right) = \exp\left(k\mu + \frac{(k\sigma)^2}{2}\right).
+$$
+
+
+> Encontrar estimadores puntuales para $\mu$ y $\sigma$ es relativamente simple, debido a la conexion de la distribucion lognormal con la distribucion gaussiana. Sin embargo, las propiedades de los estimadores en el caso gaussiano no necesariamente se heredaran al caso lognormal. Revisen la referencia de Keliber & Kotz.
+
+En `R`, la estimacion de parametros via `maxima verosimilitud` puede obtenerse empleando la libreria `MASS`.
+
+### Distribucion gamma generalizada
+
+La distribucion gamma generalizada se define a partir de la funcion de densidad de probabilidades,
+$$
+f_X(x|\alpha,\beta,\tau) = \frac{\alpha}{\beta^{\alpha\tau}\Gamma(\tau)}x^{\alpha\tau-1}\exp\left\{-\left(\frac{x}{\beta}\right)^\alpha\right\}\mathbb{I}_{(0,\infty)}(x),
+$$
+donde $\beta>0$ es el parametro de escala y $(\alpha,\tau)$ son parametros de forma.
+
+* Esta distribucion no tiene una forma analitica cerrada para su funcion de distribucion.
+
+* Esta distribucion incluye como caso particular a la distribucion Weibull, cuando $\tau=1$ y $\alpha>0$.
+
+* Los momentos de esta distribucion pueden recuperarse como
+$$
+\mathbb{E}\left(X^k\right) = \frac{\beta^k\Gamma(\tau + k/\alpha)}{\Gamma(\tau)}.
+$$
+
+> La estimacion de parametros en este tipo de distirbuciones involucra el doble reto de estimar $(\alpha,\tau)$, parametros de forma, conjuntamente. Esto es porque combinaciones de valores distintos de estos dos parametros pueden generar distribuciones que son muy parecidas en casi todo el soporte de $X$, causando una pseudo falta de identificabilidad estructural del modelo.
+
+La estimacion de parametros via `maxima verosimilitud` puede obtenerse en `R` (con precaucion) empleando la libreria `VGAM`.
+
+### Distribucion beta generalizada del segundo tipo
+
+La distribucion beta generalizada del segundo tipo de define como la modificacion de la distribuciones beta dada por,
+$$
+F_X(x|\tau_1,\tau_2,\alpha,\beta) = I_z(\tau_1,\tau_2)\mathbb{I}_{(0,\infty)}(x),
+$$
+donde 
+$$
+z:=\left(\frac{x}{\beta}\right)^\alpha,
+$$
+y
+$$
+I_z(\tau_1,\tau_2) := \frac{1}{B(\tau_1,\tau_2)}\int_{0}^{z}\frac{s^{\tau_1 - 1}}{(1+s)^{\tau_1+\tau_2}}ds.
+$$
+
+Derivado de la expresion anterior, la densidad asociada es de la forma
+$$
+f_X(s) = \frac{\alpha x^{\alpha\tau_1 - 1}}{\beta^{\alpha\tau_1} B(\tau_1,\tau_2)\left(1+\left(\frac{x}{\beta}\right)^\alpha\right)^{\tau_1+\tau_2}}\mathbb{I}_{(0,\infty)}(x).
+$$
+
+* Siendo, $\beta$ el parametro de escala, y $(\alpha,\tau_1,\tau_2)$ parametros de forma (todos positivos). Los ultimos tres parametros controlan la forma de la cola derecha de la distirbucion, definiendo variacion regular en combinaciones de $(\alpha,\tau_1)$ y $(\alpha,\tau_2)$.
+
+* Com consecuencia del punto anterior, los momentos para esta distribucion existiran en el caso en que 
+$$
+-\alpha\tau_1 < k < \alpha\tau,
+$$
+y estan dados por
+$$
+\mathbb{E}\left(X^k\right) = \beta^k \frac{B\left(\tau_1+k/\alpha,\tau_2-k/\alpha\right)}{B(\tau_1,\tau_2)}.
+$$
+
+> La estimacion puntual de los cuatro parametros de esta distirbucion es bastante complicada, y descansa en la actualidad en el uso de metodos numericos de optimizacion sobre una funcion de verosimilitud con forma analitica cerrada. Las propiedades teoricas de estos estimadores son materia de estudio en la actualidad.
+
+En `R`, la estimacion de los parametros de la distribucion beta generalizada del segundo tipo via `maxima varosimilitud` pueden obtenerse empleando la libreria `GB2`.
+
+### Distribucion Pareto generalizada
+
+La distribucion Pareto generalizada se obtiene como la distribucion asintotica de valores en exceso de un cierto umbral (*Peak-Over-Threshold*). 
+
+La funcion de supervivencia (cola derecha de la distribucion), se define como
+$$
+\bar{F}_{X}(x) = 
+\begin{cases}
+\left(1+\frac{\alpha x}{\beta}\right)^{-1/\beta}, & \text{ si } \alpha\neq 0, \\
+\exp\left\{-\frac{x}{\beta}\right\},&\text{ si }\alpha=0,
+\end{cases}
+$$
+con soporte en 
+$$
+\mathcal{X}_{\alpha,\beta} = 
+\begin{cases}
+[0,\infty), & \text{ si }\alpha\geq 0, \\
+[0,-\beta/\alpha),& \text{ si }\alpha < 0.
+\end{cases}
+$$
+
+> La estimacion de parametros via maxima verosimilitud require el uso de metodos de optimizacion numerica, aunado a un tratamiento cuidadoso del dominio de restriccion/soporte involucrado.
+
+En `R` la estimacion de los parametros via `maxima verosimilitud` de esta distribucion puede obtenerse empleando la libreria `evir`. Esta libreria incluye otros metodos de estimacion, de manera alternativa, pero no los consideraremos en este curso.
+
 
 ```{r include=FALSE}
 if(!require("EnvStats")){install.packages("EnvStats")}
@@ -204,15 +362,15 @@ if(!require("GB2")){install.packages("GB2")}
 if(!require("evir")){install.packages("evir")}
 ```
 
-```
-if(!require("EnvStats")){install.packages("EnvStats")}
-if(!require("VGAM")){install.packages("VGAM")}
-if(!require("MASS")){install.packages("MASS")}
-if(!require("GB2")){install.packages("GB2")}
-if(!require("evir")){install.packages("evir")}
-```
+## Racionalidad
 
-# Aprendizaje I
+> Hemos revisado cinco distribuciones de probabilidad cuyo proposito es el de flexibilizar la especificacion de la funcion de distribucion de severidades individuales (por el momento). La EDF flexibiliza la asignacion de probabilidades en la region de alta concentracion de datos, mientras que las otras alternativas parametricas flexibilizan la asignacion de probabilidades en el extremo derecho.
+
+> Todas estas expecificaciones son potencialmente factibles. Sin embargo, por consideraciones practicas, es requerido definir procedimientos de **comparacion** de estas distribuciones y criterior para **seleccionar la mejor alternativa** a empleas. Mas adelante revisaremos este topico.
+
+
+# Proceso de aprendizaje I
+
 
 En el `Aprendizaje I` consideramos los datos de `2005` como `datos de entrenamiento` y los de `2006` como `datos de prueba`.
 
@@ -384,4 +542,22 @@ donde $\{x_u^t\}_{u=1}^{U}$ corresponden a los $U$ valores unicos de los `datos 
 
 # Ejercicios
 
-* Realizar el procedimiento de `Aprendizaje II`
+* Realizar el `Proceso de aprendizaje I` completando la estimacion de las distribuciones faltantes.
+
+* Realizar el `Proceso de aprendizaje II`
+
+# Lectura complementaria
+
+* Kleiber & Kotz, *Statistical Size Distribution in Economics and Actuarial Science*. 
+
+  - Capitulo 3 (distribucion Pareto).
+
+  - Capitulo 4 (distribucion lognormal).
+
+  - Capitulo 5 (distribucion gamma generalizada).
+
+  - Capitulo 6 (distribucion beta generalizada).
+
+* Embrechts et al. *Modelling Extremal Events for Insurance and Finance*. 
+
+  - Capitulos 3 y 6 (distribucion Pareto generalizada).
