@@ -1,0 +1,277 @@
+---
+title: "Sesion 11 - Contruccion de Modelos / Agregacion de Riesgos"
+author:
+-  Juan Carlos Martínez-Ovando
+date: "Otoño 2019"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    toc_depth: 3
+    number_sections: yes
+    self_contained: yes
+    theme: cerulean # cosmo
+    highlight: textmate
+fig_align: "center"
+fig_width: 18
+
+header-includes:
+    - \usepackage[most]{tcolorbox}
+    - \usepackage{mathtools}
+    - \definecolor{light-yellow}{rgb}{1, 0.95, 0.7}
+    - \newtcolorbox{myquote}{colback=light-yellow,grow to right by=-10mm,grow to left by=-10mm, boxrule=0pt,boxsep=0pt,breakable}
+    - \newcommand{\todo}[1]{\begin{myquote} \textbf{TODO:} \emph{#1} \end{myquote}}
+
+---
+
+\newcommand{\WiD}{\operatorname{\text{Wi}}}
+\newcommand{\WeD}{\operatorname{\text{We}}}
+\newcommand{\WeNormD}{\operatorname{\text{We-N}}}
+\newcommand{\ExpD}{\operatorname{\text{Exp}}}
+\newcommand{\BeD}{\operatorname{\text{Be}}}
+\newcommand{\GeoD}{\operatorname{\text{Geo}}}
+\newcommand{\StD}{\operatorname{\text{St}}}
+\newcommand{\logNormD}{\operatorname{\text{logN}}}
+\newcommand{\NormD}{\operatorname{\text{N}}}
+\newcommand{\GaD}{\operatorname{\text{Ga}}}
+\newcommand{\UniD}{\operatorname{\text{U}}}
+\newcommand{\DirD}{\operatorname{\text{Dir}}}
+\newcommand{\IG}{\operatorname{\text{InG}}}
+\newcommand{\IncGa}{\operatorname{\text{IGa}}}
+\newcommand{\IGa}{\operatorname{\text{InGa}}}
+\newcommand{\PoD}{\operatorname{\text{Po}}}
+\newcommand{\BS}{\operatorname{\text{BS}}}
+\newcommand{\DP}{\operatorname{\text{DP}}}
+\newcommand{\BinD}{\operatorname{\text{Bin}}}
+\newcommand{\BinNegD}{\operatorname{\text{BinNeg}}}
+\newcommand{\dd}{\mathrm{d}}
+\newcommand{\Indic}{\mathbb{I}}
+\newcommand{\Borel}{\operatorname{\mathscr{B}}}
+\newcommand{\Filtration}{\operatorname{\mathscr{F}}}
+\newcommand{\Expec}{\operatorname{\mathbb{E}}}
+\newcommand{\Var}{\operatorname{\text{var}}}
+
+---
+
+# Objetivos
+
+* Implementaremos los tres criterios de comparacion y seleccion de modelos.
+
+* Estudiaremos las alternativas viables para calcular la distribucion del monto agregado de siniestros.
+
+* Ilustraremos esta sesion con los datos de `AllState`.
+
+---
+
+
+# Preliminares
+
+En el archivo `markdown` ejecutamos las rutinas previas se la `sesion 10`.
+
+```{r include=FALSE}
+data <- read.csv("./Datos/d4a_allstateclaim_data.csv")
+head(data)
+colnames(data)
+
+indices <- which(data$Claim_Amount > 0)
+severidades <- data[indices,]
+dim(severidades)
+table(severidades$Calendar_Year)
+
+table(severidades[,c("Calendar_Year","Blind_Make")])
+
+if(!require("ggplot2")){install.packages("ggplot2")}
+library("ggplot2")
+
+severidades$Calendar_Year <- as.factor(severidades$Calendar_Year)
+
+ggplot(severidades[,c("Calendar_Year","Claim_Amount")], aes(x=Claim_Amount,group=Calendar_Year,fill=Calendar_Year))+
+  geom_histogram(position="dodge",binwidth=0.25)+theme_bw()
+
+ggplot(severidades[which(severidades$Claim_Amount<1000),c("Calendar_Year","Claim_Amount")], aes(x=Claim_Amount,group=Calendar_Year,fill=Calendar_Year))+
+  geom_histogram(position="dodge",binwidth=0.25)+theme_bw()
+
+summary(severidades[which(severidades$Calendar_Year=="2005"),"Claim_Amount"])
+
+summary(severidades[which(severidades$Calendar_Year=="2006"),"Claim_Amount"])
+
+summary(severidades[which(severidades$Calendar_Year=="2007"),"Claim_Amount"])
+
+severidades.train <- severidades[which(severidades$Calendar_Year=="2005"),"Claim_Amount"]
+severidades.test <- severidades[which(severidades$Calendar_Year=="2006"),"Claim_Amount"]
+hist(severidades.train,50)
+
+library("EnvStats")
+p <- qemp(p = seq(0, 1, len = 100), severidades.train) 
+f.edf <- demp(p, severidades.train) 
+
+epdfPlot(severidades.train, 
+         xlim = c(0, 65), 
+         epdf.col = "cyan", 
+         xlab = "X", 
+         main = "EDF")
+epdfPlot(severidades.train, 
+         xlim = c(0, 2000), 
+         epdf.col = "cyan", 
+         xlab = "X", 
+         main = "EDF")
+```
+
+## Distribucion Pareto
+
+## Distribucion Lognormal
+
+La estimacion de la distirbucion log-normal se obtiene de la siguiente forma:
+```{r}
+library("MASS")
+par.lognorm <- fitdistr(severidades.train,"lognormal")
+par.lognorm
+```
+
+La densidad de la distribucion estimada es:
+```{r}
+severidades.train.unique <- sort(unique(severidades.train))
+d.lognorm <- dlnorm(severidades.train.unique, 
+                    par.lognorm$estimate['meanlog'], 
+                    par.lognorm$estimate['sdlog'])
+
+plot(severidades.train.unique, d.lognorm, type="l", 
+     ylab="Densidad",
+     xlab="X", 
+     xlim=c(0,65))
+title(main = "Densidad lognormal")
+
+plot(severidades.train.unique, d.lognorm, type="l", 
+     ylab="Densidad",
+     xlab="X", 
+     xlim=c(0,2000))
+title(main = "Densidad lognormal")
+```
+
+## Distribucion gamma generalizada
+
+## Distribucion beta generalizada del segundo tipo
+
+La estimacion de los parametros de la distribucion beta generalizada del segundo tipo se obtene de la siguiente forma:
+```{r}
+library("GB2")
+par.gb2 <- mlfit.gb2(severidades.train)
+par.gb2
+```
+
+## Distribucion Pareto generalizada
+
+# Comparacion de modelos
+
+En esta secion implementaremos el procedimiento de `comparacion` y `seleccion` del modelo para *severidades individuales*. Realizaremos la ilustracion con tres enfoques:
+
+a. Bondad de ajuste
+
+b. Cociente de verosimilitud
+
+c. Cociente de veroimilitud extendida
+
+## Bondad de ajuste
+
+Este enfoque basicamente consiste en contrastar los **cinco modelos parametricos** en terminos de sus `cercania/semejanza` con la **EDF**.
+
+Los criterios difieren, escencialmente, en la `metrica` empleada para calcular la `cercania/semejanza` entre distribuciones.
+
+Definimos, de manera general, a $F_{edf}(X)$ como la funcion de distirbucion empirica y $F_j(x|\hat{\theta}_j)$ como la distirbucion parametrica estimada (puntualmente) del tipo de modelo $j$.
+
+### Kolmogorov-Smirnov
+
+El estadistico para medir la `cercania/semejanza` entre distribuciones $edf$ y $j$ bajo Kolmogorov-Smirnov (KS) es
+$$
+T_{KS}(j)=\max_{x}|F_{edf}(x)-F_j(x|\hat{\theta}_j)|,
+$$
+para $j=1,\ldots,J$.
+
+**Nota.** La $edf$ es discreta, por lo que el calculo de $T_{KS}(j)$ debe realizarse en dos puntos para cada valor de $x$:
+
+* $F_{edf}(x-)$ que es el limite por la izquierda antes de $x$
+
+* $F_{edf}(x)$ que es el limite por la derecha antes de $x$.
+
+Los valores criticos tradicionalmente empleados para esta estadistica son:
+
+1. $T_\alpha=\frac{1.22}{\sqrt{n}}$ para $\alpha=0.10$ nivel de significacia,
+
+2. $T_\alpha=\frac{1.36}{\sqrt{n}}$ para $\alpha=0.05$ nivel de significacia,
+
+3. $T_\alpha=\frac{1.63}{\sqrt{n}}$ para $\alpha=0.01$ nivel de significacia,
+
+donde $n$ es el tamnio de la muestra.
+
+### Anderson-Darling
+
+En la opcion anderson-Darling (AD), la metrica para medir la `cercania/semejanza` entre distribuciones $edf$ y $j$ es definida como
+$$
+T_{AD}(j)=-nF_j(x^*_U|\hat{\theta}_j)
++n\sum_{u=1}^{U-1} [1-F_{edf}(x^*_u)]^2 \left\{\text{log}[1-F_j(x^*_u|\hat{\theta}_j)]-\text{log}[1-F_j(x^*_{u+1}|\hat{\theta}_j)]\right\}
++ n \sum_{u=2}^{U} F_{edf}(x_u^*)^2 \left[\text{log}F_j(x^*_{u+1}|\hat{\theta}_j)-\text{log}F_j(x^*_u|\hat{\theta}_j)\right],
+$$
+donde $\{x_u^*\}_{u=1}^{U}$ corresponden a los $U$ datos unicos disponibles.
+
+**Nota:** En este calculo, se hace explicito la consideracion de comparacion entre `limites por la derecha` y `limites por la izquierda` relacionados con $F_{edf}(\cdot)$.
+
+Los valores critios, para esta prueba, son tipicamente:
+
+1. $T_a=1.933$ para $a=0.10$,
+
+2. $T_a=2.492$ para $a=0.05$,
+
+3. $T_a=3.857$ para $a=0.01$.
+
+## Verosimilitud
+
+El cociente de verosimilitudes, consiste basicamente en calcular la `verosimilitud del modelo especifico` para los datos. Esta verosimilitud se calcula en dos pasos. 
+
+1. Calcula el `estimador puntual` (via `maxima verosimilitud`) de `\theta_j`, para `j=1,\ldots,J`, con base en los datos $\{x_1,\ldots,x_n\}$. 
+
+Recuerden, de los datos extraemos los datos unicos $\{x_1^*,\ldots,x_U^*\}$ (las frecuencias de los datos unicos no son requeridas en este contexto).
+
+2. Con el `estimador puntual del modelo especifico`, $F_{j}(x|\hat{\theta}_j)$, recuperamos su correspondiente densidad y calculamos la `verosimilitud del modelo` $j$ de la siguiente forma:
+$$
+lik(j)=\prod_{u=1}^{U}f_j(x_u^*|\hat{\theta}_{j}),
+$$
+para $j=1,\ldots,J$.
+
+Por cuestiones numericas, es conveniente trabajar con la `log-verosimilitud`,
+$$
+loglik(j)=\sum_{u=1}^{U} \text{log}f_j(x_u^*|\hat{\theta}_{j}).
+$$
+
+**Noten** que la verosimilitud del modelo se calcula sobre un segmento de los mismos datos con los que se estimo el modelo, `datos de entrenamiento`.
+
+## Verosimilitud predictiva
+
+Una variante del `procedimiento basado en verosimilitud` para evaluar la capacidad predictiva del modelo consiste en realizar la siguiente modificacion:
+$$
+ploglik(j)=\sum_{u=1}^{U} \text{log}f_j(x_u^t|\hat{\theta}_{j}),
+$$
+donde $\{x_u^t\}_{u=1}^{U}$ corresponden a los $U$ valores unicos de los `datos de prueba/test`. 
+
+**Noten** que la evaluacion de las densidades en los datos de prueba brinda una cuantificacion de que tanta masa de probabilidad el modelo predictivo asigna a los valores que realmente ocurrieron (pero que no fueron empleados en el proceso de estimacion).
+
+# Ejercicios
+
+* Realizar el `Proceso de aprendizaje I` completando la estimacion de las distribuciones faltantes.
+
+* Realizar el `Proceso de aprendizaje II`
+
+# Lectura complementaria
+
+* Kleiber & Kotz, *Statistical Size Distribution in Economics and Actuarial Science*. 
+
+  - Capitulo 3 (distribucion Pareto).
+
+  - Capitulo 4 (distribucion lognormal).
+
+  - Capitulo 5 (distribucion gamma generalizada).
+
+  - Capitulo 6 (distribucion beta generalizada).
+
+* Embrechts et al. *Modelling Extremal Events for Insurance and Finance*. 
+
+  - Capitulos 3 y 6 (distribucion Pareto generalizada).
