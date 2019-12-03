@@ -25,3 +25,9 @@
 * `Sesión 10` - Estimación de distribuciones
 
 * `Sesión 11` - Examen parcial 1
+
+* `Sesión 12` - Valores extremos
+
+* `Sesión 13` - Diversificacion de riesgos via modelos jerarquicos
+
+* `Sesión 14` - Diversificacion de riesgos via mezclas
