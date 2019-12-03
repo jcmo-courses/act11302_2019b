@@ -149,60 +149,206 @@ A continuacion veremos como implementar estos modelos en diferentes contextos.
 
 # Mezclas de regresion binomial  {.tabset .tabset-fade .tabset-pills}
 
-```{r}
-set.seed(2807)
-library("flexmix")
+En este caso consideramos que la variable de interes, $Y_i$, es discreta en la forma de conteo o dicotomica, i.e.
+$$
+Y_i|\iota_i=l \sim \text{Bin}(y|J,\theta_{il}),
+$$
+donde 
+\begin{eqnarray}
+\theta_{il} & = & \mathbb{P}(\text{siniestro})  \\
+  & = & g(\beta_l'z_i),
+\end{eqnarray}
+siendo $\beta_l$ un vector de coeficientes de regresion para el **segmento no evidente** $l$, y $z_i$ un conjunto de covariables.
 
-data("NregFix", package = "flexmix")
+Por otro lado, 
+$$
+\mathbb{P}\left(\iota_{i} = l\right) = w_l,
+$$
+para todo $i$.
 
-Model <- FLXMRglm(~ x2 + x1)
+> Marginalizando $\iota_i$ tenemos
+$$
+Y_i \sim \sum_{l=1}^L w_l \text{Bin}(y|J,\theta_{il}).
+$$
 
-fittedModel <- stepFlexmix(y ~ 1, model = Model, nrep = 3, k = 3,
-                           data = NregFix, concomitant = FLXPmultinom(~ w))
+## Implementacion
 
-fittedModel <- relabel(fittedModel, "model", "x1")
-
-summary(refit(fittedModel))
-
-Model2 <- FLXMRglmfix(fixed = ~ x2, nested = list(k = c(1, 2),
-                                                  formula = c(~ 0, ~ x1)), varFix = TRUE)
-
-fittedModel2 <- flexmix(y ~ 1, model = Model2,
-                        cluster = posterior(fittedModel), data = NregFix,
-                        concomitant = FLXPmultinom(~ w))
-
-BIC(fittedModel)
-
-BIC(fittedModel2)
-summary(refit(fittedModel2))
-
-```
+Veamos como funciona este modelo en la practica. Los datos para implementar este tipo de modelos deben estar estructurados de la siguiente forma.
 
 ```{r}
 if(!require("flexmix")){install.packages("flexmix")}
 library("flexmix")
 
+data("NregFix", package = "flexmix")
+
+dim(NregFix)
+
+tail(NregFix)
+
+colnames(NregFix)
+```
+Con la siguiente instruccion indicaremos que **covariables** del `data.frame` `NregFix` consideraremos en el modelo.
+
+```{r}
+Model <- FLXMRglm(~ x2 + x1)
+Model
+```
+
+La implementacion computacional del modelo via el `algoritmo EM` (i.e. via simulacion estocastica), se realiza de la siguiente forma:
+
+```{r}
+set.seed(12345)
+
+fittedModel <- stepFlexmix(y ~ 1, model = Model, 
+                           nrep = 3, k = 3,
+                           data = NregFix, concomitant = FLXPmultinom(~ w))
+
+fittedModel
+
+fittedModel <- relabel(fittedModel, "model", "x1")
+
+fittedModel
+```
+
+* En este caso, consideramos `k = 3` posibles clases. 
+
+* El modelo considera la inclusion de una ordenada al origen en el componente de regresion, por eso la especificacion `y ~ 1`.
+
+* Con la funcion `relabel` se etiquetan de nuevo los grupos encontrados en la mezcla. Esto es por una consideracion de identificabilidad (se conoce a este tema como *label-switching problem*).
+
+> El resumen de esta implementacion es como sigue:
+
+```{r}
+summary(refit(fittedModel))
+```
+
+* Una `estimacion ingenua` de las probabilidades $(w_1,w_2,w_3)$ se obtendria a partir de los `Cluster sizes`, i.e
+$$
+\hat{w}_1 = 95 / 200, \\
+\hat{w}_2 = 74 / 200, \\
+\hat{w}_3 = 31 / 200. \\
+$$
+
+## Modelo complementario
+
+Consideremos ahora un modelo complementario a `Model`. Este es etiquetado como `Model2`, el cual incluye ordenada al origen tambien (i.e. `y ~ 1`).
+
+```{r}
+Model2 <- FLXMRglmfix(fixed = ~ x2, 
+                      nested = list(k = c(1, 2),
+                      formula = c(~ 0, ~ x1)), varFix = TRUE)
+
+fittedModel2 <- flexmix(y ~ 1, model = Model2,
+                        cluster = posterior(fittedModel), 
+                        data = NregFix,
+                        concomitant = FLXPmultinom(~ w))
+fittedModel2
+```
+
+> Noten que la composicion de los grupos en `Model2` es marginalmente distinta.
+
+El resumen de `Model2` es el siguiente:
+
+```{r}
+summary(refit(fittedModel2))
+```
+
+> Observen que la especificacion de `Model2` permite identificar un conjunto de covariables potencialmente distinto al interior de los grupos (caso `Comp1`).
+
+## Comparacion de modelos
+
+Habiendo implementado dos modelos que potencialmente resultan significativos y cuyas diferencias son sutiles y relevantes, la pregunta ahora reside en:
+
+> Como elegir el **mejor modelo** entre estas alternativas.
+
+Como vimos, criterior de bondad de ajuste en este caso no aplicarian, porque `Model` y `Model2` son estructuralmente distintos, siendo ambos bastante flexibles.
+
+> El criterio que elegimos es basado en la **metrica de devianza**:
+
+```{r}
+BIC(fittedModel)
+
+BIC(fittedModel2)
+```
+
+> Que modelo elegiriamos???
+
+# Mezcla de regresion Gaussiana
+
+En este caso, la variable de inetres es $Y_i$ con soporte en la recta real, y el modelo seria
+$$
+Y_i \sim \sum_{l=1}^L w_l \text{N}(y|\mu_{il},\sigma^2_l),
+$$
+donde 
+$$
+\mu_{il} = \beta_l'z_i.
+$$
+* Este es el caso de mezclar $L$ modelos de regresion convencionales.
+
+> Noten que el modelo es util para describir la variabilidad subyacente a las **severidades individuales** a traves de la transformacion de los montos asociada con la distribucion `logNormal`.
+
+## Implementacion
+
+De igual forma, los datos deben estar estructurados como un `data.frame`.
+
+
+```{r}
 data("NPreg", package = "flexmix")
-## mixture of two linear regression models. Note that control parameters
-## can be specified as named list and abbreviated if unique.
-ex1 <- flexmix(yn ~ x + I(x^2), data = NPreg, k = 2,
-control = list(verb = 5, iter = 100))
-ex1
-summary(ex1)
-plot(ex1)
-## now we fit a model with one Gaussian response and one Poisson
-## response. Note that the formulas inside the call to FLXMRglm are
-## relative to the overall model formula.
-ex2 <- flexmix(yn ~ x, data = NPreg, k = 2,
-model = list(FLXMRglm(yn ~ . + I(x^2)),
-FLXMRglm(yp ~ ., family = "poisson")))
-plot(ex2)
-ex2
-table(ex2@cluster, NPreg$class)
-## for Gaussian responses we get coefficients and standard deviation
-parameters(ex2, component = 1, model = 1)
-## for Poisson response we get only coefficients
-parameters(ex2, component = 1, model = 2)
+
+dim(NPreg)
+
+colnames(NPreg)
+
+tail(NPreg)
+```
+
+Ahora, implementamos la mezcla de dos componetes, i.e. $L=2$.
+
+```{r}
+Model.G <- flexmix(yn ~ x + I(x^2), 
+               data = NPreg, k = 2,
+               control = list(verb = 5, iter = 100))
+
+Model.G
+
+summary(Model.G)
+summary(refit(Model.G))
+
+plot(Model.G)
+```
+
+> Noten que `Comp2` no es significativo.
+
+## Modelo complementario
+
+Al igual que en la ilustracion anterior, consideraremos ahora un modelo complementario **bastante loco** (por motivos ilustrativos), en el que:
+
+a. Un componente es Gaussiano
+
+b. Otro componente es Poisson.
+
+```{r}
+Model3 <- flexmix(yn ~ x, data = NPreg, k = 2,
+               model = list(FLXMRglm(yn ~ . + I(x^2)),
+                            FLXMRglm(yp ~ ., family = "poisson")))
+plot(Model3)
+Model3
+table(Model3@cluster, NPreg$class)
+```
+
+> Los parametros asociados con el componente Gaussiano:
+
+```{r}
+parameters(Model3, component = 1, model = 1)
+```
+
+> Los parametros asociados con el componente Poisson:
+
+```{r}
+parameters(Model3, component = 1, model = 2)
+```
+
+```
 ## fitting a model only to the Poisson response is of course
 ## done like this
 ex3 <- flexmix(yp ~ x, data = NPreg, k = 2,
@@ -215,61 +361,83 @@ model = FLXMRglm(family = "poisson"))## And now a binomial example. Mixtures of 
 
 # Mezclas de regresion Poisson  {.tabset .tabset-fade .tabset-pills}
 
+Consideraremos ahora el caso en que la **variable de interes** es $Y_i$ con soporte en los enteros positivos, y consideramos que el modelo es de la forma
+$$
+Y_i \sim \sum_{l=1}^L w_l \text{Po}(y|\lambda_{il}),
+$$
+donde
+$$
+\lambda_{il} = \exp\left\{ \beta_l ' z_i\right\}.
+$$
+
+## Implementacion
+
+Al igual que antes, los datos deben estar estructurados como un `data.frame`:
+
 ```{r}
 data("fabricfault", package = "flexmix")
 
-fabricMix <- stepFlexmix(Faults ~ 1, model = FLXMRglmfix(family="poisson",
+dim(fabricfault)
+
+colnames(fabricfault)
+
+tail(fabricfault)
+```
+
+```{r}
+Model4 <- stepFlexmix(Faults ~ 1, model = FLXMRglmfix(family="poisson",
                                                          fixed = ~ log(Length)), data = fabricfault, k = 2, nrep = 3)
-summary(fabricMix)
+summary(Model4)
 
-summary(refit(fabricMix))
+summary(refit(Model4))
+```
 
-Lnew <- seq(0, 1000, by = 50)
+## Prediccion
 
-fabricMix.pred <- predict(fabricMix, newdata = data.frame(Length = Lnew))
+> Recordemos que el proposito de estos modelos, con relacion a nuestro curso, es el de producir **predicciones** sobre valores futuros.
 
-fabricMix2 <- flexmix(Faults ~ 0, data = fabricfault,
-                      cluster = posterior(fabricMix),
+En el contexto de regresion, la prediccion se realiza de manera *mas o menos controlada*, considerando que a partir de **covariables**,
+$$
+z_1^f,\ldots,z_m^f,
+$$
+podemos general --a partir del modelo--, los **valores predictivos**
+$$
+Y_1^f,\ldots,Y_m^f.
+$$
+La generacion de valores predictivos, en el caso de mezclas, se obtiene facilmente de la siguiente forma:
+
+```{r}
+Znew <- seq(0, 1000, by = 50)
+
+fabricMix.pred <- predict(Model4, newdata = data.frame(Length = Znew))
+
+head(fabricMix.pred)
+```
+
+### Considerando el modelo complementario
+
+```{r}
+fabricMix2 <- flexmix(Faults ~ 0, 
+                      data = fabricfault,
+                      cluster = posterior(Model4),
                       model = FLXMRglmfix(family = "poisson", fixed = ~ log(Length),
                                           nested = list(k=c(1,1), formula=list(~0,~1))))
 
 summary(refit(fabricMix2))
 
 fabricMix2.pred <-  fabricMix2.pred <- predict(fabricMix2,
-                                               newdata = data.frame(Length = Lnew))
+                                               newdata = data.frame(Length = Znew))
+head(fabricMix2.pred)
 ```
 
-# Mezclas de regresion beta  {.tabset .tabset-fade .tabset-pills}
+> Noten que las predicciones pueden ser significativamente distintas, en algunos casos. 
 
-```{r}
-data("betablocker", package = "flexmix")
-
-betaGlm <- glm(cbind(Deaths, Total - Deaths) ~ Treatment,
-               family = "binomial", data = betablocker)
-
-betaGlm
-
-betaMixFix <- stepFlexmix(cbind(Deaths, Total - Deaths) ~ 1 | Center,
-                          model = FLXMRglmfix(family = "binomial", fixed = ~ Treatment),
-                          k = 2:4, nrep = 3, data = betablocker)
-
-betaMixFix
-
-betaMix <- stepFlexmix(cbind(Deaths, Total - Deaths) ~ Treatment | Center,
-                       model = FLXMRglm(family = "binomial"), k = 3, nrep = 3,
-                       data = betablocker)
-
-summary(betaMix)
-
-# print(plot(betaMixFix_3, mark = 1, col = "grey", markcol = 1))
-
-parameters(betaMix)
-
-table(clusters(betaMix))
-
-predict(betaMix, newdata = data.frame(Treatment = c("Control", "Treated")))
-```
+> Por eso, necesitamos ser cuidadosos con la especificacion y eleccion del modelo para prediccion.
 
 # Lecturas complementarias  {.tabset .tabset-fade .tabset-pills}
 
 * Frühwirth-Schnatter, Sylvia, *Finite Mixture and Markov Switching Models*, Springer 2006.
+
+* Ferrari & Cribari-Neto. *Beta Regression for Modeling Rates and Proportions.* Journal of Applied Statistics, 2004.
+
+* Simas et al. *Improved Estimators for a General Class of Beta Regression Models.* Computational Statistics & Data Analysis, 2010.
