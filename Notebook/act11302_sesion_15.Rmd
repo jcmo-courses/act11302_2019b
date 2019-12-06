@@ -1,0 +1,193 @@
+---
+title: "Sesion 15 - Aspectos de agregacion de riesgos diversificados"
+author:
+-  Juan Carlos Martínez-Ovando
+date: "Otoño 2019"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    toc_depth: 3
+    number_sections: yes
+    self_contained: yes
+    theme: cerulean # cosmo
+    highlight: textmate
+fig_align: "center"
+fig_width: 18
+
+header-includes:
+    - \usepackage[most]{tcolorbox}
+    - \usepackage{mathtools}
+    - \definecolor{light-yellow}{rgb}{1, 0.95, 0.7}
+    - \newtcolorbox{myquote}{colback=light-yellow,grow to right by=-10mm,grow to left by=-10mm, boxrule=0pt,boxsep=0pt,breakable}
+    - \newcommand{\todo}[1]{\begin{myquote} \textbf{TODO:} \emph{#1} \end{myquote}}
+
+---
+
+\newcommand{\WiD}{\operatorname{\text{Wi}}}
+\newcommand{\WeD}{\operatorname{\text{We}}}
+\newcommand{\WeNormD}{\operatorname{\text{We-N}}}
+\newcommand{\ExpD}{\operatorname{\text{Exp}}}
+\newcommand{\BeD}{\operatorname{\text{Be}}}
+\newcommand{\GeoD}{\operatorname{\text{Geo}}}
+\newcommand{\StD}{\operatorname{\text{St}}}
+\newcommand{\NormD}{\operatorname{\text{N}}}
+\newcommand{\GaD}{\operatorname{\text{Ga}}}
+\newcommand{\UniD}{\operatorname{\text{U}}}
+\newcommand{\DirD}{\operatorname{\text{Dir}}}
+\newcommand{\IG}{\operatorname{\text{InG}}}
+\newcommand{\IncGa}{\operatorname{\text{IGa}}}
+\newcommand{\IGa}{\operatorname{\text{InGa}}}
+\newcommand{\PoD}{\operatorname{\text{Po}}}
+\newcommand{\BS}{\operatorname{\text{BS}}}
+\newcommand{\DP}{\operatorname{\text{DP}}}
+\newcommand{\BinD}{\operatorname{\text{Bin}}}
+\newcommand{\BinNegD}{\operatorname{\text{BinNeg}}}
+\newcommand{\dd}{\mathrm{d}}
+\newcommand{\Indic}{\mathbb{I}}
+\newcommand{\Borel}{\operatorname{\mathscr{B}}}
+\newcommand{\Filtration}{\operatorname{\mathscr{F}}}
+\newcommand{\Expec}{\operatorname{\mathbb{E}}}
+\newcommand{\Var}{\operatorname{\text{var}}}
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Preliminares {.tabset .tabset-fade .tabset-pills}
+
+En las `sesiones 15 y 16` hemos estudiado dos formas de diversificar riesgos tanto para la estudiar la **frecuencia de siniestros** como para la **severidad individual**.
+
+Ambas **estrategias de diversificacion** estan construidas al rededor del **riesgos agregados**,
+$$
+S = \sum_{j} Y_{j},
+$$
+para la cual calculamos la medida de incertidumbre,
+$$
+F_{S}(s) = \mathbb{P}(S \leq s),
+$$
+y, consecuentemente, la **prima de riesgo agregado**,
+$$
+\Pi_S = \phi_{F_S}(S),
+$$
+para alguna funcion $\phi(\cdot)$.
+
+## Diferencias
+
+> La diferencia fundamental entre ambas estrategias de diversificacion reside en la cuantificacion de la **medida de probabilidad** $F_S(s)$.
+
+### Enfoque de jerarquizacion
+
+El enfoque de jerarquizacion *descompone/desmembra* los integrantes del portafio en *sub-portafolios* homogeneos, i.e.
+\begin{eqnarray}
+\mathcal{P} & = & \{Y_{11},\ldots,Y_{I_1 1},Y_{12},\ldots,Y_{I_2 2},\ldots, Y_{I_K K}\} \\
+  & = & \{Y_{11},\ldots,Y_{I_1 1}\} \cup \{Y_{12},\ldots,Y_{I_2 2}\}  \cup \cdots \cup \{Y_{1K},\ldots, Y_{I_K K}\} \\
+  & = & \mathcal{P}_1 \cup \cdots \cup \mathcal{P}_K, 
+\end{eqnarray}
+donde cada *subportafolio* $\mathcal{P}_k$ es estudiado con una medida de probabilidad particular,
+$$
+Y_{ik} \sim F_{S_k}(s),
+$$
+siendo 
+$$
+S = \sum_{k} S_k.
+$$
+
+De esta forma, la **distribucion de riesgo agregado** resulta en una **convolucion** en dos etapas:
+
+1. En la `etapa 1` se calcula la distribucion del riesgo agregado al interior de cada **subportafolio**, i.e.
+$$
+F_{S_k}(s) = \mathbb{P}\left(\sum_{i} Y_{ik} \leq s \right),
+$$
+calculada con base en la distribucion de **severidades individuales**, $F_k(y)$, para $k=1,\ldots,K$.
+
+2. En la `etapa 2` se calcula la distribucion del riesgo agreado para todo el **portafolio agregado**, i.e.
+$$
+F_S(s) = \mathbb{P}\left( \sum_k S_k \leq s\right),
+$$
+cuya convolucion se calcula ahora con base en las distribuciones $F_{S_1}(\cdot)$, \ldots, $F_{S_K}(\cdot)$.
+
+> Desde luego, la **prima de riesgo agregada** calculada con base en $F_S(s)$ combina dos elementos de incertidumbre: Primero, la **incertidumbre subyacente a cada subportafolio** y, segundo, la **incertidumbre entre subportafolios**.
+
+**Primas de riesgo**
+
+En algunos casos, derivado de aspectos practicos de modelacion, es comun **suponer** que los supportafolios de riesgo son *ajenos* entre si, en cuyo caso, la **prima de riesgo agregada** suele calcularse adetivamente, i.e.
+$$
+\Pi_S = \sum_{k} \Pi_{S_k}.
+$$
+En este caso, la **prima de riesgo individual**, $\widetilde{\Pi}_k$, podria/deberia calcularse al interior de cada *subportafolio*, i.e. tendriamos $K$ primas de riesgo individuales, donde
+$$
+\widetilde{\Pi}_k = \frac{\Pi_{S_k}}{J_k},
+$$
+donde $J_k$ corresponde al numero total de suscripcion dentro del subportafolio $k$, para $k=1,\ldots,K$.
+
+> Noten que no necesariamente tendriamos que la prima de riesgo individual coincida con $\widehat{\Pi}_S = \frac{\sum_{k}\Pi_{S_k}}{\sum_{k} J_k}$.
+
+> **Noten** que el enfoque de **jerarquizacion** se desarrolla bajo el supuesto de conocer **informacion explcita** en cada **poliza (historica o futura)**, que es la que deriba en partir el *portafolio de riesgos* en los $K$ *sub portafolios*.
+
+### Enfoque de jerarquizacion
+
+Por otro lado, el enfoque de mezclas de distribuciones se desarrolla en torno a la **sospecha** que existen condiciones de exposicion al riesgo que son intrinsecamente heterogeneas dentro del portafolio, pero tales condiciones de heterogeneidad **no son explicitas/evidentes**. 
+
+* En este caso, es imposible considerar *ex-ante* la particion explicita de riesgos del portafolio, como en el caso del *enfoque jerarquizado*, i.e. consideramos un portafolio de riesgo integral,
+$$
+\mathcal{P} = \{Y_1,\ldots,Y_J\}.
+$$
+
+* Sin embargo, la *sospecha* de condiciones de riesgo se puede instrumentar mediante la adopcion de mezclas de distribuciones, i.e.
+$$
+Y_i \sim \sum_{l=1}^{L} w_l F_l(y).
+$$
+
+La implicacion directa de adoptar el enfoque de mezclas de distribucions, ya sea para la *frecuencia de siniestros* como para la *severidad individual*, involucrara calcular la convolucion
+$$
+F_S(s) = \mathbb{P}\left(\sum_i Y_i \leq s\right),
+$$
+calculada con base en 
+$$
+F(y) = \sum_{l=1}^L w_l F_l(y).
+$$
+> Recordemos que calcular esta convolucion con base en una sola medida de riesgo $F_l(y)$ es en si mismo una tarea complicada, como vimos en las `sesiones 3-7`. En este caso enfrentamos una complicacion adicional de considerar la *combinacion (lineal convexa)* de $L$ medidas base.
+
+**Primas de riesgo**
+
+En este caso, los metodos recomendables para calcular la **distribucion de riesgos agreados** son:
+
+a. Basados en recursion
+
+b. Basados en simulacion.
+
+Bajo ambos metodos, el calculo de la **prima de riesgo agregado** descansa en el uso del *metodo de Monte Carlo*, i.e.
+$$
+\widetilde{\Pi}_S \approx \frac{1}{M}\sum_{m=1}^M \phi\left(s^{(k)}\right),
+$$
+donde 
+$$
+s^{(1)},\ldots,s^{(M)},
+$$
+son *datos simulados* (presumiblemente `iid`) de $F_S(s)$, y $\phi(\cdot)$ es la funcion asociada con la nocion de riesgo que adoptemos.
+
+> Noten que la implementacion el procedimiento de simulacion es directa en el caso de mezclas, simplemente aumentando una capa en la simulacion de cada $y_i^{(m)}$ para *distinguir aleatoriamente* de que componente $F_l(y)$ se simulara, con base en las probabilidades $(w_1,\ldots,w_L)$.
+
+A diferencia del *enfoque jerarquizado*, el enfoque basado en mezclas no permite cuantificar primas de riesgo diferenciadas (sobre todo en el calculo de la *prima de riesgo individual*). De esta forma, para el calculo de la prima de riesgo individual seguimos:
+$$
+\widehat{\Pi} = \frac{\widetilde{\Pi}_S}{J},
+$$
+donde $\widetilde{\Pi}_S$ es obenida via Monte Carlo, y $J$ es el tamanio de la suscripcion.
+
+# Comentarios
+
+> Respecto al *enfoque jerarquizado*, recordemos que algunas *nociones de riesgo* no son aditivas. Por ejemplo, la prima de riesgo basada en *VaR* son subaditivas, aun bajo el supuesto de tener *sub-portafolios ajenos*. En este ejemplo particular, es particularmente sensible argmentar/documentar con solidez el procedimiento de estimacion.
+
+> El calculo de la prima de riesgo basada en *VaR* o *CVaR* empleando el *metodo de Monte Carlo* puede requerir adecuaciones al procedimiento tradicional para estimar efectivamente el extremo derecho de la distribucion. Vean el `suplemento 2` de esta sesion.
+
+# Discusion
+
+> Discutamos y comentemos ahora acerca de los enfoques que han considerado en sus trabajos finales...
+
+# Lecturas complementarias
+
+* Ausin et al (2011) "Bayesian analysis of aggregate loss models", *Mathematical Finance*. `act11302_sesion_15_suplemento1.pdf`
+
+* Guharay et al (-2017) "Robust Estimation of Value-at-Risk through", *Risks*. `act11302_sesion_15_suplemento2.pdf`

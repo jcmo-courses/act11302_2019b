@@ -31,3 +31,5 @@
 * `Sesión 13` - Diversificacion de riesgos via modelos jerarquicos
 
 * `Sesión 14` - Diversificacion de riesgos via mezclas
+
+* `Sesión 15` - Aspectos de agregacion de riesgos diversificados
