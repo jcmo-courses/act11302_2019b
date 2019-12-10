@@ -33,3 +33,5 @@
 * `Sesión 14` - Diversificacion de riesgos via mezclas
 
 * `Sesión 15` - Aspectos de agregacion de riesgos diversificados
+
+* `Sesión 16` - Portafolios de reaseguro
