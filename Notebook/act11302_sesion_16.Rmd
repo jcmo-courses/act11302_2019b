@@ -102,28 +102,29 @@ R(\alpha) = \boldsymbol{R}'\boldsymbol{\alpha},
 $$
 with,
 \begin{eqnarray}
-\mathbb{E}_F\left(R(w)\right) & = & \mu'\boldsymbol{w} \\  
-var_F\left(R(w)\right) & = & \boldsymbol{w}' \Sigma \boldsymbol{w}.
+\mathbb{E}_F\left(R(\alpha)\right) & = & \mu'\boldsymbol{\alpha} \\  
+var_F\left(R(\alpha)\right) & = & \boldsymbol{\alpha}' \Sigma \boldsymbol{\alpha}.
 \end{eqnarray}
 
-> The **problem** consists in choosing the retention vector **appropriately** $\boldsymbol{\alpha}$, according to some optimality criteria.
+> The **problem** consists in choosing the retention vector **properly** $\boldsymbol{\alpha}$, according to some optimality criteria.
 
 ## de Finetti/Markowitz solution
 
-> de Finetti and Markowitz proposed an optimality criterion to choose $ \boldsymbol{\alpha} $, which as of the date, it is known as the `mean-variance criterion`.
+> de Finetti and Markowitz proposed an optimality criterion to choose $\boldsymbol{\alpha}$, which as of the date, it is known as the `mean-variance criterion`.
 
-This criterion is a rough way to choose $ \boldsymbol{\alpha} $ so that *maximize the expected return of the portfolio,* i.e. the **optimal choice** corresponds to the optimization problem in which
+This criterion is a rough way to choose $\boldsymbol{\alpha}$ so that it *maximizes the expected return of the portfolio,* i.e. the **optimal choice** corresponds to the optimization problem in which
 $$
 \min \frac{1}{2} \boldsymbol{\alpha}' \Sigma \boldsymbol{\alpha},\\
 \text{s.a. } \mu'\boldsymbol{\alpha} > e, \\
 $$
-for a given predefined $ e $ threshold, with $ \boldsymbol{\alpha}$ chosen within the $(L-1)$-dimensional simplex.
+for a given predefined $e$ threshold, with $\boldsymbol{\alpha}$ chosen within the $(L-1)$-dimensional simplex.
 
 The standard solution of this problem is obtained analogously using the Lagrange method, where
 $$
-\boldsymbol{w}^* = \min_{\boldsymbol{w}} \frac{1}{2} \boldsymbol{w}' \Sigma \boldsymbol{w} + \lambda\left(e - \mu'\boldsymbol{w}\right) + \boldsymbol{u}'(\boldsymbol{w}-1)-\boldsymbol{v}'\boldsymbol{w},
+\boldsymbol{\alpha}^* = \min_{\boldsymbol{\alpha}} \frac{1}{2} \boldsymbol{w}' \Sigma \boldsymbol{\alpha} + 
+\lambda\left(e - \mu'\boldsymbol{\alpha}\right) + \boldsymbol{u}'(\boldsymbol{\alpha}-1)-\boldsymbol{v}'\boldsymbol{\alpha},
 $$
-where $ \lambda $ is the Lagrange coefficient (with $ \lambda> 0 $), and $ \boldsymbol{u} ,\boldsymbol{v} $ being positive $L$-dimensional vectors.
+where $\lambda$ is the Lagrange coefficient (with $\lambda>0$), and $\boldsymbol{u} ,\boldsymbol{v}$ being positive $L$-dimensional vectors.
 
 # Frameworks  {.tabset .tabset-fade .tabset-pills}
 
@@ -133,19 +134,21 @@ Allocation is defined as the solution to a decision theory problem,
 $$
 \alpha^{*}
 	    =
-	    \arg\min_{\alpha \in \mathcal{S}_{p-1}}
+	    \arg\max_{\alpha \in \mathcal{S}_{p-1}}
 	    \mathbb{E}_{\mathbb{P}} \left\{U(\alpha,\boldsymbol{R})\right\}
 $$
 where
 
 * $\mathcal{S}_{p-1}$ -- decision space
 
-* $\mathcal{X}$ -- uncertainty space 
+* $\mathcal{R}$ -- uncertainty space 
 
 * $\mathbb{P}$ -- probability measure for $\boldsymbol{R}$
 
 * $U(\cdot,\cdot)$ -- subjective preferences (utility or loss functions)
 
+  - Analogamente, podemos expresar el problema como *optimizacion por minimizacion* cuando $U(\cdot,\cdot)$ se sustituya por una funcion de perdida, $L(\cdot,\cdot)$.
+  
 ## *Mean-Variance*
 
 Approach proposed by de~Finetti (1940) and Markowitz (1952)
@@ -160,7 +163,7 @@ $$
 	  \right\}.
 $$	
 
-**Observations**
+**Remarks**
 
 * $\lambda$ is the underlying {\it risk aversion} coefficient
 
@@ -168,13 +171,13 @@ $$
 
 **Comments**
 
-* This framework is based on arguments such as {\it dispersion} and {\it co-movement}
+* This framework is based on arguments such as *dispersion* and *co-movement*
 		
-* Extensions to cover {\it bias} in the portfolio are allowed
+* Extensions to cover *bias* in the portfolio are allowed
 		
 * Loss function and probability measure are restricted to elliptical countours
 
-* Desirable to include considerations based on {\it extreme losses} --or {\it extreme gains} in finance--
+* Desirable to include considerations based on *extreme losses* --or *extreme gains* in finance--
 
 ## Risk measures
 
@@ -208,7 +211,7 @@ where
 $$
   ES_{\alpha,q} = \frac{1}{1-q}
 	   \int_{VaR_{\alpha,q}}^{\infty} 
-	   c \mathbb{P}_{\alpha}(c|c>VaR_q)\dd c
+	   c \mathbb{P}_{\alpha}(c|c>VaR_q) d c
 $$
 where 
 

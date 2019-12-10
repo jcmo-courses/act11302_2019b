@@ -1540,25 +1540,26 @@ R_l = \Pi_l - S_l.
 <p>De esta forma, los niveles de retencion <span class="math inline">\(\alpha_l\)</span>s inducen un nivel agregado de <strong>ganancias netas retenidas</strong>, <span class="math inline">\(R(\alpha)\)</span>, donde <span class="math display">\[
 R(\alpha) = \boldsymbol{R}&#39;\boldsymbol{\alpha},
 \]</span> with, <span class="math display">\[\begin{eqnarray}
-\mathbb{E}_F\left(R(w)\right) &amp; = &amp; \mu&#39;\boldsymbol{w} \\  
-var_F\left(R(w)\right) &amp; = &amp; \boldsymbol{w}&#39; \Sigma \boldsymbol{w}.
+\mathbb{E}_F\left(R(\alpha)\right) &amp; = &amp; \mu&#39;\boldsymbol{\alpha} \\  
+var_F\left(R(\alpha)\right) &amp; = &amp; \boldsymbol{\alpha}&#39; \Sigma \boldsymbol{\alpha}.
 \end{eqnarray}\]</span></p>
 <blockquote>
-<p>The <strong>problem</strong> consists in choosing the retention vector <strong>appropriately</strong> <span class="math inline">\(\boldsymbol{\alpha}\)</span>, according to some optimality criteria.</p>
+<p>The <strong>problem</strong> consists in choosing the retention vector <strong>properly</strong> <span class="math inline">\(\boldsymbol{\alpha}\)</span>, according to some optimality criteria.</p>
 </blockquote>
 </div>
 <div id="de-finettimarkowitz-solution" class="section level2">
 <h2><span class="header-section-number">1.3</span> de Finetti/Markowitz solution</h2>
 <blockquote>
-<p>de Finetti and Markowitz proposed an optimality criterion to choose $  $, which as of the date, it is known as the <code>mean-variance criterion</code>.</p>
+<p>de Finetti and Markowitz proposed an optimality criterion to choose <span class="math inline">\(\boldsymbol{\alpha}\)</span>, which as of the date, it is known as the <code>mean-variance criterion</code>.</p>
 </blockquote>
-<p>This criterion is a rough way to choose $  $ so that <em>maximize the expected return of the portfolio,</em> i.e. the <strong>optimal choice</strong> corresponds to the optimization problem in which <span class="math display">\[
+<p>This criterion is a rough way to choose <span class="math inline">\(\boldsymbol{\alpha}\)</span> so that it <em>maximizes the expected return of the portfolio,</em> i.e. the <strong>optimal choice</strong> corresponds to the optimization problem in which <span class="math display">\[
 \min \frac{1}{2} \boldsymbol{\alpha}&#39; \Sigma \boldsymbol{\alpha},\\
 \text{s.a. } \mu&#39;\boldsymbol{\alpha} &gt; e, \\
-\]</span> for a given predefined $ e $ threshold, with $ $ chosen within the <span class="math inline">\((L-1)\)</span>-dimensional simplex.</p>
+\]</span> for a given predefined <span class="math inline">\(e\)</span> threshold, with <span class="math inline">\(\boldsymbol{\alpha}\)</span> chosen within the <span class="math inline">\((L-1)\)</span>-dimensional simplex.</p>
 <p>The standard solution of this problem is obtained analogously using the Lagrange method, where <span class="math display">\[
-\boldsymbol{w}^* = \min_{\boldsymbol{w}} \frac{1}{2} \boldsymbol{w}&#39; \Sigma \boldsymbol{w} + \lambda\left(e - \mu&#39;\boldsymbol{w}\right) + \boldsymbol{u}&#39;(\boldsymbol{w}-1)-\boldsymbol{v}&#39;\boldsymbol{w},
-\]</span> where $ $ is the Lagrange coefficient (with $ &gt; 0 $), and $  , $ being positive <span class="math inline">\(L\)</span>-dimensional vectors.</p>
+\boldsymbol{\alpha}^* = \min_{\boldsymbol{\alpha}} \frac{1}{2} \boldsymbol{w}&#39; \Sigma \boldsymbol{\alpha} + 
+\lambda\left(e - \mu&#39;\boldsymbol{\alpha}\right) + \boldsymbol{u}&#39;(\boldsymbol{\alpha}-1)-\boldsymbol{v}&#39;\boldsymbol{\alpha},
+\]</span> where <span class="math inline">\(\lambda\)</span> is the Lagrange coefficient (with <span class="math inline">\(\lambda&gt;0\)</span>), and <span class="math inline">\(\boldsymbol{u} ,\boldsymbol{v}\)</span> being positive <span class="math inline">\(L\)</span>-dimensional vectors.</p>
 </div>
 </div>
 <div id="frameworks" class="section level1 tabset tabset-fade tabset-pills">
@@ -1568,14 +1569,17 @@ var_F\left(R(w)\right) &amp; = &amp; \boldsymbol{w}&#39; \Sigma \boldsymbol{w}.
 <p>Allocation is defined as the solution to a decision theory problem, <span class="math display">\[
 \alpha^{*}
         =
-        \arg\min_{\alpha \in \mathcal{S}_{p-1}}
+        \arg\max_{\alpha \in \mathcal{S}_{p-1}}
         \mathbb{E}_{\mathbb{P}} \left\{U(\alpha,\boldsymbol{R})\right\}
 \]</span> where</p>
 <ul>
 <li><p><span class="math inline">\(\mathcal{S}_{p-1}\)</span> – decision space</p></li>
-<li><p><span class="math inline">\(\mathcal{X}\)</span> – uncertainty space</p></li>
+<li><p><span class="math inline">\(\mathcal{R}\)</span> – uncertainty space</p></li>
 <li><p><span class="math inline">\(\mathbb{P}\)</span> – probability measure for <span class="math inline">\(\boldsymbol{R}\)</span></p></li>
-<li><p><span class="math inline">\(U(\cdot,\cdot)\)</span> – subjective preferences (utility or loss functions)</p></li>
+<li><p><span class="math inline">\(U(\cdot,\cdot)\)</span> – subjective preferences (utility or loss functions)</p>
+<ul>
+<li>Analogamente, podemos expresar el problema como <em>optimizacion por minimizacion</em> cuando <span class="math inline">\(U(\cdot,\cdot)\)</span> se sustituya por una funcion de perdida, <span class="math inline">\(L(\cdot,\cdot)\)</span>.</li>
+</ul></li>
 </ul>
 </div>
 <div id="mean-variance" class="section level2">
@@ -1590,17 +1594,17 @@ var_F\left(R(w)\right) &amp; = &amp; \boldsymbol{w}&#39; \Sigma \boldsymbol{w}.
       - \frac{\lambda}{2} \alpha&#39;var_{\mathbb{P}}\left(\boldsymbol{R}\right)\alpha 
       \right\}.
 \]</span></p>
-<p><strong>Observations</strong></p>
+<p><strong>Remarks</strong></p>
 <ul>
 <li><p><span class="math inline">\(\lambda\)</span> is the underlying {} coefficient</p></li>
 <li><p><span class="math inline">\(\rho(\alpha,\boldsymbol{R})=\alpha&#39;var_{\mathbb{P}}\left(\boldsymbol{R}\right)\alpha\)</span> – risk measure</p></li>
 </ul>
 <p><strong>Comments</strong></p>
 <ul>
-<li><p>This framework is based on arguments such as {} and {}</p></li>
-<li><p>Extensions to cover {} in the portfolio are allowed</p></li>
+<li><p>This framework is based on arguments such as <em>dispersion</em> and <em>co-movement</em></p></li>
+<li><p>Extensions to cover <em>bias</em> in the portfolio are allowed</p></li>
 <li><p>Loss function and probability measure are restricted to elliptical countours</p></li>
-<li><p>Desirable to include considerations based on {} –or {} in finance–</p></li>
+<li><p>Desirable to include considerations based on <em>extreme losses</em> –or <em>extreme gains</em> in finance–</p></li>
 </ul>
 </div>
 <div id="risk-measures" class="section level2">
@@ -1630,7 +1634,7 @@ VaR_{\alpha,q}
 <p><span class="math display">\[
   ES_{\alpha,q} = \frac{1}{1-q}
        \int_{VaR_{\alpha,q}}^{\infty} 
-       c \mathbb{P}_{\alpha}(c|c&gt;VaR_q)\mathrm{d}c
+       c \mathbb{P}_{\alpha}(c|c&gt;VaR_q) d c
 \]</span> where</p>
 <ul>
 <li><p><span class="math inline">\(\mathbb{P}_{\alpha}\)</span> - probability measure for <span class="math inline">\(C\)</span> induced by <span class="math inline">\(\mathbb{P}\)</span> and <span class="math inline">\(\alpha\)</span></p></li>
